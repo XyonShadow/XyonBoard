@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Download } from 'lucide-react';
+import { ArrowRight, Download, Star } from 'lucide-react';
 import './HeroSection.css';
 
 const roles = [
@@ -41,8 +41,21 @@ export const HeroSection: React.FC = () => {
   return (
     <div className="relative overflow-hidden bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 rounded-3xl p-8 md:p-12 text-white shadow-2xl">
       <div className="absolute inset-0 bg-black/10" />
+
+      <div className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+          <Star className="w-4 h-4 text-yellow-300" />
+          <span className="text-sm font-medium">Available for new projects</span>
+          <span className="w-2 h-2 bg-green-400 rounded-full" />
+        </div>
+
       <h1 className="text-4xl font-bold">Hi, I'm Michael</h1>
       <p className="text-lg mt-4">{typewriterText}<span className="ml-1">|</span></p>
+
+      <p className="text-lg mb-8 max-w-2xl leading-relaxed">
+        I craft exceptional digital experiences that blend beautiful design with powerful functionality.
+        Let's build something extraordinary together.
+      </p>
+
       <div className="mt-6 flex items-center justify-center gap-4">
         <button
           type="button"
