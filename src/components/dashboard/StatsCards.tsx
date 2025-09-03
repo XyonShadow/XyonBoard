@@ -18,7 +18,41 @@ const statsCards: StatCardData[] = [
   { value: '15+', numericValue: 15, label: 'Technologies Mastered', color: 'from-orange-500 to-red-500', icon: Code }
 ];
 
+const AnimatedCounter: React.FC<{ 
+  end: number; 
+  suffix?: string; 
+  duration?: number;
+  isVisible: boolean;
+}> = ({ end, suffix = '', duration = 2000, isVisible }) => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!isVisible) return;
+
+    let startTime: number;
+    let animationFrame: number;
+
+    const animate = (currentTime: number) => {
+      if (!startTime) startTime = currentTime;
+      const progress = Math.min((currentTime - startTime) / duration, 1);
+      
+      const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+      setCount(Math.floor(easeOutQuart * end));
+
+      if (progress < 1) {
+        animationFrame = requestAnimationFrame(animate);
+      }
+    };
+
+    animationFrame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationFrame);
+  }, [end, duration, isVisible]);
+
+  return <span>{count}{suffix}</span>;
+};
+
 export const StatsCards: React.FC = () => {
+  const isVisible = true;
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       {statsCards.map((stat, index) => {
@@ -32,7 +66,11 @@ export const StatsCards: React.FC = () => {
               <Icon className="w-6 h-6 text-white" />
             </div>
             <h3 className={`text-3xl font-black mb-2 bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`}>
-              {stat.value}
+              {stat.label.includes('%') ? (
+                <AnimatedCounter end={stat.numericValue} suffix="%" isVisible={isVisible} duration={2500} />
+              ) : (
+                <AnimatedCounter end={stat.numericValue} suffix="+" isVisible={isVisible} duration={2000} />
+              )}
             </h3>
             <p className="text-gray-600 dark:text-gray-400 font-medium">
               {stat.label}
