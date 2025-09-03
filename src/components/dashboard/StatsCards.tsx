@@ -93,8 +93,14 @@ export const StatsCards: React.FC = () => {
           <div
             key={index}
             ref={el => {cardRefs.current[index] = el;}}
-            className="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50"
+            className={`group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-200/50 dark:border-gray-700/50 hover:scale-105 transform cursor-pointer ${
+              isVisible ? 'animate-slideInUp' : 'opacity-0 translate-y-8'
+            }`}
+            style={{ animationDelay: `${index * 0.1}s` }}
           >
+            {/* Gradient Overlay on Hover */}
+            <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} opacity-0 group-hover:opacity-10 rounded-2xl transition-all duration-500`}></div>
+ 
             <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${stat.color} flex items-center justify-center mb-4 shadow-lg`}>
               <Icon className="w-6 h-6 text-white" />
             </div>
