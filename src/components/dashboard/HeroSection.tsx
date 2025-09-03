@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { ArrowRight, Download } from 'lucide-react';
 import './HeroSection.css';
 
 const roles = [
@@ -41,6 +42,20 @@ export const HeroSection: React.FC = () => {
     <section className="p-8 text-center bg-blue-500 text-white">
       <h1 className="text-4xl font-bold">Hi, I'm Michael</h1>
       <p className="text-lg mt-4">{typewriterText}<span className="ml-1">|</span></p>
+      <div className="mt-6 flex items-center justify-center gap-4">
+        <button
+          type="button"
+          className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold shadow hover:bg-gray-100 inline-flex items-center gap-2"
+        >
+          Get In Touch <ArrowRight size={18} />
+        </button>
+        <button
+          type="button"
+          className="border border-white/70 text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 inline-flex items-center gap-2"
+        >
+          <Download size={18} /> Download Resume
+        </button>
+     </div>
     </section>
   );
 };
