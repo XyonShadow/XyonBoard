@@ -100,20 +100,43 @@ export const StatsCards: React.FC = () => {
           >
             {/* Gradient Overlay on Hover */}
             <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} opacity-0 group-hover:opacity-10 rounded-2xl transition-all duration-500`}></div>
- 
-            <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${stat.color} flex items-center justify-center mb-4 shadow-lg`}>
-              <Icon className="w-6 h-6 text-white" />
+            
+            {/* Floating Effect on Hover */}
+            <div className="relative z-10 group-hover:-translate-y-1 transition-transform duration-300">
+              {/* Icon with Rotation Animation */}
+              <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${stat.color} flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 group-hover:rotate-12 transition-all duration-300`}>
+                <Icon className="w-6 h-6 text-white group-hover:animate-pulse" />
+              </div>
+              
+              {/* Animated Counter */}
+              <h3 className={`text-3xl font-black mb-2 bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`}>
+                {stat.label.includes('%') ? (
+                  <AnimatedCounter end={stat.numericValue} suffix="%" isVisible={isVisible} duration={2500} />
+                ) : (
+                  <AnimatedCounter end={stat.numericValue} suffix="+" isVisible={isVisible} duration={2000} />
+                )}
+              </h3>
+
+              {/* Label with Slide Animation */}
+              <p className="text-gray-600 dark:text-gray-400 font-medium group-hover:text-gray-800 dark:group-hover:text-gray-200 transition-colors duration-300">
+                {stat.label}
+              </p>
             </div>
-            <h3 className={`text-3xl font-black mb-2 bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`}>
-              {stat.label.includes('%') ? (
-                <AnimatedCounter end={stat.numericValue} suffix="%" isVisible={isVisible} duration={2500} />
-              ) : (
-                <AnimatedCounter end={stat.numericValue} suffix="+" isVisible={isVisible} duration={2000} />
-              )}
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 font-medium">
-              {stat.label}
-            </p>
+            
+            {/* Sparkle Effect on Hover */}
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+              {[...Array(5)].map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute w-1.5 h-1.5 bg-white rounded-full animate-sparkle"
+                  style={{
+                    top: `${20 + Math.random() * 60}%`,
+                    left: `${20 + Math.random() * 60}%`,
+                    animationDelay: `${i * 0.3}s`,
+                  }}
+                />
+              ))}
+            </div>
           </div>
         );
       })}

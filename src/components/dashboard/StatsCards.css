@@ -12,3 +12,18 @@
 .animate-slideInUp {
   animation: slideInUp 0.6s ease-out forwards;
 }
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-sparkle {
+  animation: sparkle 1.5s ease-in-out infinite;
+}
