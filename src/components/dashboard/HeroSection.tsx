@@ -39,7 +39,8 @@ export const HeroSection: React.FC = () => {
   }, [currentIndex, isDeleting, loopNum, typingSpeed]);
 
   return (
-    <section className="p-8 text-center bg-blue-500 text-white">
+    <div className="relative overflow-hidden bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 rounded-3xl p-8 md:p-12 text-white shadow-2xl">
+      <div className="absolute inset-0 bg-black/10" />
       <h1 className="text-4xl font-bold">Hi, I'm Michael</h1>
       <p className="text-lg mt-4">{typewriterText}<span className="ml-1">|</span></p>
       <div className="mt-6 flex items-center justify-center gap-4">
@@ -55,7 +56,7 @@ export const HeroSection: React.FC = () => {
         >
           <Download size={18} /> Download Resume
         </button>
-     </div>
-    </section>
+      </div>
+    </div>
   );
 };
