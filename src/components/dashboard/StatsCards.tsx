@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './StatsCards.css';
 import { Target, Clock, Award, Code } from 'lucide-react';
 import './StatsCards.css'
@@ -52,14 +52,47 @@ const AnimatedCounter: React.FC<{
 };
 
 export const StatsCards: React.FC = () => {
-  const isVisible = true;
+  const [visibleCards, setVisibleCards] = useState<boolean[]>(new Array(statsCards.length).fill(false));
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const observers = cardRefs.current.map((ref, index) => {
+      if (!ref) return null;
+      
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              setVisibleCards(prev => {
+                const newVisible = [...prev];
+                newVisible[index] = true;
+                return newVisible;
+              });
+            }, index * 200);
+          }
+        },
+        { threshold: 0.3 }
+      );
+      
+      observer.observe(ref);
+      return observer;
+    });
+
+    return () => {
+      observers.forEach(observer => observer?.disconnect());
+    };
+  }, []);
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       {statsCards.map((stat, index) => {
         const Icon = stat.icon;
+        const isVisible = visibleCards[index];
+
         return (
           <div
             key={index}
+            ref={el => {cardRefs.current[index] = el;}}
             className="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50"
           >
             <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${stat.color} flex items-center justify-center mb-4 shadow-lg`}>
