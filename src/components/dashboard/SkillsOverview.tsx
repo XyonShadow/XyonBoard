@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Code, Palette, Server, Database, Cloud } from 'lucide-react';
 import './SkillsOverview.css';
 
@@ -84,8 +84,31 @@ const AnimatedProgressBar: React.FC<{
 };
 
 export const SkillsOverview: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+  
   return (
-    <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50">
+    <div 
+      ref={containerRef}
+      className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 hover:shadow-xl transition-all duration-500"
+    >
       <h2 className="text-xl font-bold mb-4">Skills Overview</h2>
       <div className="space-y-6">
         {skills.map((skill, index) => (
@@ -93,7 +116,7 @@ export const SkillsOverview: React.FC = () => {
             key={skill.name}
             skill={skill} 
             index={index} 
-            isVisible={true}
+            isVisible={isVisible}
           />
         ))}
       </div>
