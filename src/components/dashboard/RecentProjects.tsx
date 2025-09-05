@@ -1,5 +1,5 @@
-import React from 'react';
-import './RecentProjects.css'
+import React, { useState, useEffect, useRef } from 'react';
+import './RecentProjects.css';
 
 interface Project {
   id: string;
@@ -61,9 +61,16 @@ const Projects: Project[] = [
   }
 ];
 
-const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
+const ProjectCard: React.FC<{ 
+  project: Project;
+  index: number; 
+  isVisible: boolean;
+}> = ({ project, index, isVisible }) => {
   return (
-    <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200/50 dark:border-gray-700/50">
+    <div className={`relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200/50 dark:border-gray-700/50"
+                    opacity-0 ${isVisible ? 'animate-fadeInUp' : 'opacity-0 translate-y-8'}`}
+                    style={{ animationDelay: `${index * 0.2}s` }}
+    >
       <h3 className="font-bold text-xl mb-2 text-gray-900 dark:text-white">{project.title}</h3>
       <p className="text-gray-600 dark:text-gray-400 text-sm">{project.description}</p>
       <div className="flex gap-2 mt-2 flex-wrap">
@@ -76,11 +83,39 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
 };
 
 export const RecentProjects: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.2 }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50">
+    <div 
+      ref={containerRef}
+      className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 hover:shadow-xl transition-all duration-500"
+    >
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {Projects.map(project => (
-          <ProjectCard key={project.id} project={project} />
+        {Projects.map((project, index) => (
+          <ProjectCard 
+            key={project.id} 
+            project={project} 
+            index={index} 
+            isVisible={isVisible}
+          />
         ))}
       </div>
     </div>
