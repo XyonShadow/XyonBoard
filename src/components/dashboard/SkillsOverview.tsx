@@ -68,8 +68,8 @@ const AnimatedProgressBar: React.FC<{
   const Icon = skill.icon;
 
   return (
-    <div className={`group/skill transition-all duration-300 hover:scale-[1.01] ${isVisible ? 'animate-fadeInLeft' : 'opacity-0 -translate-x-8'}`}>
-      {/* Skill name and icon */}
+    <div className={`cursor-default ${isVisible ? 'animate-fadeInLeft' : 'opacity-0 -translate-x-8'}`}>
+    <div className="transition-transform duration-300 hover:scale-[1.05]">  {/* Skill name and icon */}
       <div className="flex justify-between items-center mb-3">
         <div className="flex items-center gap-3">
           <div className={`w-8 h-8 rounded-lg bg-gradient-to-r ${skill.color} flex items-center justify-center group-hover/skill:rotate-12 transition-all duration-300`}>
@@ -109,6 +109,7 @@ const AnimatedProgressBar: React.FC<{
           ))}
         </div>
       </div>
+    </div>
     </div>
   );
 };
