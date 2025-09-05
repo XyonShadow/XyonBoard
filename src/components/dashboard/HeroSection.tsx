@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowRight, Download, Star } from 'lucide-react';
-import './HeroSection.css';
 
 // Role for typewriter effect
 const roles = [
@@ -76,7 +75,7 @@ export const HeroSection: React.FC = () => {
       
       {/* Action Buttons with Hover Animations */}
       <div className="flex flex-col sm:flex-row gap-4 opacity-0 animate-fadeInUp" style={{ animationDelay: '0.9s' }}>
-        <button type="button" className="group bg-white text-blue-600 px-8 py-4 rounded-2xl font-bold hover:bg-gray-100 transition-all duration-300 flex items-center gap-3 shadow-lg hover:shadow-xl hover:scale-105 transform animate-bounce-gentle">
+        <button type="button" className="group bg-white text-blue-600 px-8 py-4 rounded-2xl font-bold hover:bg-gray-100 transition-all duration-300 flex items-center gap-3 shadow-lg hover:shadow-xl hover:scale-105 transform animate-bounceGentle">
           <span>Get In Touch</span>
           <ArrowRight size={20} className="group-hover:translate-x-2 group-hover:scale-110 transition-transform duration-300" />
         </button>
