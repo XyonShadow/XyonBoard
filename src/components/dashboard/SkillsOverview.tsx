@@ -158,6 +158,28 @@ export const SkillsOverview: React.FC = () => {
           />
         ))}
       </div>
+
+      {/* Floating skill badges */}
+      <div className="mt-8 flex flex-wrap gap-2">
+        {[
+          { label: 'Frontend', from: 'blue-500', to: 'cyan-500' },
+          { label: 'Backend', from: 'green-500', to: 'emerald-500' },
+          { label: 'Design', from: 'purple-500', to: 'pink-500' },
+          { label: 'Version Control', from: 'orange-500', to: 'red-500' },
+        ].map((badge, index) => (
+          <div
+            key={badge.label}
+            className={`px-3 py-1 bg-gradient-to-r from-${badge.from} to-${badge.to} text-white text-xs
+                        rounded-full shadow-lg transition-transform duration-300 cursor-default
+                        opacity-0 animate-fadeInUp`
+                      }
+            style={{ animationDelay: `${1 + index * 0.2}s` }} // stagger each by 0.2s
+          >
+            {badge.label}
+          </div>
+        ))}
+      </div>
+
     </div>
   );
 };
