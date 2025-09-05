@@ -36,6 +36,10 @@ export default {
           '0%, 100%': { transform: 'translateY(0px)' },
           '50%': { transform: 'translateY(20px)' },
         },
+        bounceGentle: {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-3px)' },
+        },
       },
       animation: {
         fadeInUp: 'fadeInUp 0.6s ease-out forwards',
@@ -44,6 +48,7 @@ export default {
         fadeInRight: 'fadeInRight 0.6s ease-out forwards',
         float: 'float 3s ease-in-out infinite',
         floatReverse: 'floatReverse 3s ease-in-out infinite',
+        bounceGentle: 'bounceGentle 1.5s ease-in-out infinite',
       },
     },
   },
