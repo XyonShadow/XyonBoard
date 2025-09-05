@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './RecentProjects.css';
-import { ExternalLink, Github, Star } from 'lucide-react';
+import { ExternalLink, Github, Star, ArrowLeft, TrendingUp } from 'lucide-react';
 
 interface Project {
   id: string;
@@ -67,95 +67,132 @@ const ProjectCard: React.FC<{
   index: number; 
   isVisible: boolean;
 }> = ({ project, index, isVisible }) => {
+  const [isFlipped, setIsFlipped] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const [dotPositions] = useState(() =>
+    [...Array(5)].map(() => ({
+      left: Math.random() * 90,
+      top: Math.random() * 90,
+      delay: Math.random() * 2,
+    }))
+  );
+
   return (
     <div 
-      className={`group relative opacity-0 dark:border-gray-700/50 perspective-1000 ${isVisible ? 'animate-fadeInUp' : 'opacity-0 translate-y-8'}`}
+      className={`group relative h-[26rem] opacity-0 perspective-1000 ${isVisible ? 'animate-fadeInUp' : 'opacity-0 translate-y-8'}`}
       style={{ animationDelay: `${index * 0.2}s` }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all
-                      duration-500 border border-gray-200/50 dark:border-gray-700/50 h-full group-hover:scale-105 transform">
-        {/* Project Image */}
-        <div className="relative h-48 overflow-hidden bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500">
-          <div className={`absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent transition-transform duration-500`}></div>
-          
-          {/* Floating Elements */}
-          <div className="absolute inset-0 pointer-events-none">
-            {[...Array(5)].map((_, i) => {
-              const left = Math.random() * 90;
-              const top = Math.random() * 90;
-              
-              return (
-                <div
-                  key={i}
-                  className={`absolute w-2 h-2 bg-white/30 rounded-full animate-float-${i + 1}`}
-                  style={{
-                    left: `${left}%`,
-                    top: `${top}%`,
-                    animationDelay: `${Math.random() * 2}s`
-                  }}
-                />
-              );
-            })}
-          </div>
-          
-          {/* Status Badge */}
-          <div className="absolute top-4 left-4 animate-fadeInLeft" style={{ animationDelay: '0.3s' }}>
-            <span className={`px-3 py-1 rounded-full text-xs font-semibold inline-block backdrop-blur-sm cursor-default ${
-              project.status === 'live' ? 'bg-emerald-500/90 text-white animate-pulse-slow' :
-              project.status === 'featured' ? 'bg-yellow-500/90 text-black animate-glow' :
-              'bg-blue-500/90 text-white animate-bounceGentle'
-            }`}>
-              {project.status === 'live' ? 'Live' : 
-                project.status === 'featured' ? 'Featured' : 
-                'In Development'}
-            </span>
-          </div>
+      <div className={`relative w-full h-full transition-transform duration-1500 transform-style-preserve-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
 
-          {/* Action Buttons */}
-          <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-500 animate-fadeInRight">
-            {project.liveUrl && (
-              <a
-                href={project.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 bg-white/20 backdrop-blur-sm rounded-lg text-white hover:bg-emerald-500 transition-all duration-300 hover:scale-125 hover:rotate-12"
+        {/* Front of Card */}
+        <div className="absolute inset-0 w-full h-full backface-hidden">
+          <div className="relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all
+                          duration-500 border border-gray-200/50 dark:border-gray-700/50 h-full group-hover:scale-105 transform">
+            
+            {/* Project Image */}
+            <div className="relative h-40 overflow-hidden bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500">
+              <div className={`absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent transition-transform duration-500 ${isHovered ? 'scale-110' : ''}`}></div>
+
+              {/* Floating Elements */}
+              <div className="absolute inset-0 pointer-events-none">
+                {dotPositions.map((pos, i) => (
+                  <div
+                    key={i}
+                    className={`absolute w-2 h-2 bg-white/30 rounded-full animate-float-${i + 1}`}
+                    style={{
+                      left: `${pos.left}%`,
+                      top: `${pos.top}%`,
+                      animationDelay: `${pos.delay}s`,
+                    }}
+                  />
+                ))}
+              </div>
+              
+              {/* Status Badge */}
+              <div className="absolute top-4 left-4 animate-fadeInLeft" style={{ animationDelay: '0.3s' }}>
+                <span className={`px-3 py-1 rounded-full text-xs font-semibold inline-block backdrop-blur-sm cursor-default ${
+                  project.status === 'live' ? 'bg-emerald-500/90 text-white animate-pulse-slow' :
+                  project.status === 'featured' ? 'bg-yellow-500/90 text-black animate-glow' :
+                  'bg-blue-500/90 text-white animate-bounceGentle'
+                }`}>
+                  {project.status === 'live' ? 'Live' : 
+                    project.status === 'featured' ? 'Featured' : 
+                    'In Development'}
+                </span>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-500 animate-fadeInRight">
+                {project.liveUrl && (
+                  <a
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 bg-white/20 backdrop-blur-sm rounded-lg text-white hover:bg-emerald-500 transition-all duration-300 hover:scale-125 hover:rotate-12"
+                  >
+                    <ExternalLink size={16} />
+                  </a>
+                )}
+                {project.githubUrl && (
+                  <a
+                    href={project.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 bg-white/20 backdrop-blur-sm rounded-lg text-white hover:bg-gray-700 transition-all duration-300 hover:scale-125 hover:rotate-12"
+                  >
+                    <Github size={16} />
+                  </a>
+                )}
+              </div>
+
+              {/* Flip Button */}
+              <button 
+                onClick={() => setIsFlipped(true)}
+                className="absolute bottom-4 right-4 p-2 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/30 transition-all duration-300 opacity-0 group-hover:opacity-100 hover:scale-110"
               >
-                <ExternalLink size={16} />
-              </a>
-            )}
-            {project.githubUrl && (
-              <a
-                href={project.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 bg-white/20 backdrop-blur-sm rounded-lg text-white hover:bg-gray-700 transition-all duration-300 hover:scale-125 hover:rotate-12"
-              >
-                <Github size={16} />
-              </a>
-            )}
+                <TrendingUp size={16} />
+              </button>
+            </div>
+
+            {/* Project Info */}
+            <div className="p-6">
+              <h3 className="font-bold text-xl mb-3 text-gray-900 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors duration-300">
+                {project.title}
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 mb-4 text-sm leading-relaxed">
+                {project.description}
+              </p>
+              
+              {/* Technologies */}
+              <div className="flex gap-2 flex-wrap">
+                {project.technologies.map((tech, techIndex) => (
+                  <span 
+                    key={tech}
+                    className={`px-3 py-1 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 text-blue-800 dark:text-blue-200 text-xs rounded-full font-medium border border-blue-200 dark:border-blue-800 hover:scale-110 transition-transform duration-300 cursor-default opacity-0 animate-fadeInUp`}
+                    style={{ animationDelay: `${0.5 + techIndex * 0.1}s` }}
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Project Info */}
-        <div className="p-6">
-          <h3 className="font-bold text-xl mb-3 text-gray-900 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors duration-300">
-            {project.title}
-          </h3>
-          <p className="text-gray-600 dark:text-gray-400 mb-4 text-sm leading-relaxed">
-            {project.description}
-          </p>
-          
-          {/* Technologies */}
-          <div className="flex gap-2 flex-wrap">
-            {project.technologies.map((tech, techIndex) => (
-              <span 
-                key={tech}
-                className={`px-3 py-1 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 text-blue-800 dark:text-blue-200 text-xs rounded-full font-medium border border-blue-200 dark:border-blue-800 hover:scale-110 transition-transform duration-300 cursor-pointer opacity-0 animate-fadeInUp`}
-                style={{ animationDelay: `${0.5 + techIndex * 0.1}s` }}
-              >
-                {tech}
-              </span>
-            ))}
+        {/* Back of Card */}
+        <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180">
+          <div className="relative bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl overflow-hidden shadow-lg h-full text-white p-6 flex flex-col justify-center">
+            <button 
+              onClick={() => setIsFlipped(false)}
+              className="absolute top-4 right-4 p-2 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/30 transition-all duration-300"
+            >
+              <ArrowLeft size={18} />
+            </button>
+
+            <h3 className="text-2xl font-bold mb-4 text-center">Project Stats</h3>
           </div>
         </div>
       </div>
