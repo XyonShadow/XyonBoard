@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Zap, ChevronRight, Code, Palette, Server, Database, Cloud } from 'lucide-react';
 import './SkillsOverview.css';
 
+// Define the structure of each skill
 interface Skill {
   name: string;
   level: number;
@@ -10,6 +11,7 @@ interface Skill {
   color: string;
 }
 
+// List of skills to display
 const skills: Skill[] = [
   { name: 'React/TypeScript', level: 95, category: 'frontend', icon: Code, color: 'from-blue-500 to-cyan-500' },
   { name: 'Node.js/Express', level: 90, category: 'backend', icon: Server, color: 'from-green-500 to-emerald-500' },
@@ -19,41 +21,44 @@ const skills: Skill[] = [
   { name: 'Mobile Development', level: 75, category: 'frontend', icon: Code, color: 'from-teal-500 to-cyan-500' }
 ];
 
+// Animated progress bar for each skill
 const AnimatedProgressBar: React.FC<{ 
   skill: Skill; 
   index: number; 
   isVisible: boolean;
 }> = ({ skill, index, isVisible }) => {
-  const [width, setWidth] = useState(0);
-  const [displayLevel, setDisplayLevel] = useState(0);
+  const [width, setWidth] = useState(0);           // Current width of progress bar
+  const [displayLevel, setDisplayLevel] = useState(0); // Number displayed inside progress bar
 
   useEffect(() => {
-    if (!isVisible) return;
+    if (!isVisible) return; // Only animate when the container becomes visible
 
     let animationFrame: number;
 
+    // Stagger the animation for each skill
     const timer = setTimeout(() => {
-      setWidth(skill.level);
-      
-      // Animate the number counting
-      const duration = 1500;
+      setWidth(skill.level); // Set the progress bar width
+
+      const duration = 1500; // Duration of count animation in ms
       let startTime: number;
-      
+
+      // Animate the numeric count from 0 to skill.level
       const animateNumber = (currentTime: number) => {
         if(!startTime) startTime = currentTime;
         const progress = Math.min((currentTime - startTime) / duration, 1);
-        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+        const easeOutQuart = 1 - Math.pow(1 - progress, 4); // Smooth easing
         
-        setDisplayLevel(Math.floor(easeOutQuart * skill.level));
-        
+        setDisplayLevel(Math.floor(easeOutQuart * skill.level)); // Update number
+
         if (progress < 1) {
           animationFrame = requestAnimationFrame(animateNumber);
         }
       };
-      
-      animationFrame = requestAnimationFrame(animateNumber);
-    }, index * 200);
 
+      animationFrame = requestAnimationFrame(animateNumber);
+    }, index * 200); // Stagger each bar by 200ms
+
+    // Clean up on unmount or re-render
     return () => {
       clearTimeout(timer);
       cancelAnimationFrame(animationFrame);
@@ -63,7 +68,8 @@ const AnimatedProgressBar: React.FC<{
   const Icon = skill.icon;
 
   return (
-    <div className={`group/skill transition-all duration-300 hover:scale-[1.01]`}>
+    <div className={`group/skill transition-all duration-300 hover:scale-[1.01] ${isVisible ? 'animate-fadeInLeft' : 'opacity-0 -translate-x-8'}`}>
+      {/* Skill name and icon */}
       <div className="flex justify-between items-center mb-3">
         <div className="flex items-center gap-3">
           <div className={`w-8 h-8 rounded-lg bg-gradient-to-r ${skill.color} flex items-center justify-center group-hover/skill:rotate-12 transition-all duration-300`}>
@@ -73,15 +79,17 @@ const AnimatedProgressBar: React.FC<{
             {skill.name}
           </span>
         </div>
+        {/* Display numeric progress level */}
         <div className={`text-sm font-bold text-white bg-gradient-to-r ${skill.color} px-3 py-1 rounded-full shadow-lg transition-all duration-300`}>
           {displayLevel}%
         </div>
       </div>
-      
+
+      {/* Progress bar container */}
       <div className="relative h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden transition-all duration-300">
         {/* Background shimmer effect */}
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover/skill:translate-x-[200%] transition-transform duration-1000"></div>
-        
+
         {/* Progress bar */}
         <div 
           className={`absolute top-0 left-0 h-full bg-gradient-to-r ${skill.color} rounded-full transition-all duration-1500 ease-out shadow-lg group-hover/skill:shadow-xl`}
@@ -90,8 +98,8 @@ const AnimatedProgressBar: React.FC<{
           {/* Shine effect */}
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shine"></div>
         </div>
-        
-        {/* Skill level indicators */}
+
+        {/* Skill markers (25%, 50%, 75%) */}
         <div className="absolute inset-0 flex justify-between items-center px-1">
           {[25, 50, 75].map((marker) => (
             <div 
@@ -106,9 +114,10 @@ const AnimatedProgressBar: React.FC<{
 };
 
 export const SkillsOverview: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false); // Track when container is visible
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Intersection Observer to trigger animations when container enters viewport
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -116,7 +125,7 @@ export const SkillsOverview: React.FC = () => {
           setIsVisible(true);
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.3 } // Trigger when 30% visible
     );
 
     if (containerRef.current) {
@@ -125,12 +134,13 @@ export const SkillsOverview: React.FC = () => {
 
     return () => observer.disconnect();
   }, []);
-  
+
   return (
     <div 
       ref={containerRef}
       className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 hover:shadow-xl transition-all duration-500 group"
     >
+      {/* Header with icon */}
       <div className="flex items-center justify-between mb-8">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
           <div className="relative">
@@ -142,12 +152,14 @@ export const SkillsOverview: React.FC = () => {
             Skills Overview
           </span>
         </h2>
-        <button className="inline-flex items-center text-blue-600 dark:text-blue-400  transition-all duration-300 link-underline-80
+        {/* View All button */}
+        <button className="inline-flex items-center text-blue-600 dark:text-blue-400 transition-all duration-300 link-underline-80
                           hover:scale-110 hover:text-blue-600 dark:hover:text-blue-300 text-sm font-semibold">
           View All <ChevronRight className="w-4 h-4" />
         </button>
       </div>
       
+      {/* Animated skill progress bars */}
       <div className="space-y-6">
         {skills.map((skill, index) => (
           <AnimatedProgressBar 
@@ -160,7 +172,7 @@ export const SkillsOverview: React.FC = () => {
       </div>
 
       {/* Floating skill badges */}
-      <div className="mt-8 flex flex-wrap gap-2">
+      <div className={`mt-8 flex flex-wrap gap-2 opacity-0 ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`} style={{ animationDelay: '1s' }}>
         {[
           { label: 'Frontend', from: 'blue-500', to: 'cyan-500' },
           { label: 'Backend', from: 'green-500', to: 'emerald-500' },
@@ -171,15 +183,13 @@ export const SkillsOverview: React.FC = () => {
             key={badge.label}
             className={`px-3 py-1 bg-gradient-to-r from-${badge.from} to-${badge.to} text-white text-xs
                         rounded-full shadow-lg transition-transform duration-300 cursor-default
-                        opacity-0 animate-fadeInUp`
-                      }
-            style={{ animationDelay: `${1 + index * 0.2}s` }} // stagger each by 0.2s
+                        opacity-0 animate-fadeInUp`}
+            style={{ animationDelay: `${1 + index * 0.2}s` }} // Each badge starts slightly after the previous
           >
             {badge.label}
           </div>
         ))}
       </div>
-
     </div>
   );
 };
