@@ -112,9 +112,11 @@ export const StatsCards: React.FC = () => {
           <div
             key={index}
             ref={el => { cardRefs.current[index] = el; }} // Assign ref for IntersectionObserver
-            className={`group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-200/50 dark:border-gray-700/50 hover:scale-105 transform cursor-pointer ${
-              isVisible ? 'animate-slideInUp' : 'opacity-0 translate-y-8' // Slide in when visible
-            }`}
+            className={`group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl
+                        shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-200/50
+                        dark:border-gray-700/50 hover:scale-105 transform cursor-pointer opacity-0
+                        ${isVisible ? 'animate-fadeInUp' : 'opacity-0 translate-y-8'} // Slide in when visible
+                      `}
             style={{ animationDelay: `${index * 0.1}s` }} // Slight delay per card
           >
             {/* Gradient Overlay appears on hover */}
