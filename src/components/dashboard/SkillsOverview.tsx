@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Code, Palette, Server, Database, Cloud } from 'lucide-react';
+import { Zap, ChevronRight, Code, Palette, Server, Database, Cloud } from 'lucide-react';
 import './SkillsOverview.css';
 
 interface Skill {
@@ -129,9 +129,25 @@ export const SkillsOverview: React.FC = () => {
   return (
     <div 
       ref={containerRef}
-      className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 hover:shadow-xl transition-all duration-500"
+      className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 hover:shadow-xl transition-all duration-500 group"
     >
-      <h2 className="text-xl font-bold mb-4">Skills Overview</h2>
+      <div className="flex items-center justify-between mb-8">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+          <div className="relative">
+            <Zap className="w-6 h-6 text-yellow-500 group-hover:animate-spin transition-all duration-500" />
+            <div className="absolute inset-0 w-6 h-6 bg-yellow-300 animate-ping opacity-20 [animation-duration:3s]"></div>
+          </div>
+          <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-transparent 
+                          bg-clip-text group-hover:from-purple-600 group-hover:to-pink-500 transition-all duration-500">
+            Skills Overview
+          </span>
+        </h2>
+        <button className="inline-flex items-center text-blue-600 dark:text-blue-400  transition-all duration-300 link-underline-80
+                          hover:scale-110 hover:text-blue-600 dark:hover:text-blue-300 text-sm font-semibold">
+          View All <ChevronRight className="w-4 h-4" />
+        </button>
+      </div>
+      
       <div className="space-y-6">
         {skills.map((skill, index) => (
           <AnimatedProgressBar 
