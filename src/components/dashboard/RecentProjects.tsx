@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import './RecentProjects.css';
 import { ExternalLink, Github, Star, Calendar, ArrowLeft, TrendingUp } from 'lucide-react';
 
+// Define the Project type
 interface Project {
   id: string;
   title: string;
@@ -17,6 +18,7 @@ interface Project {
   };
 }
 
+// Sample project data
 const Projects: Project[] = [
   {
     id: 'ecommerce-platform',
@@ -62,14 +64,18 @@ const Projects: Project[] = [
   }
 ];
 
+// Component for each individual project card
 const ProjectCard: React.FC<{ 
   project: Project;
   index: number; 
   isVisible: boolean;
 }> = ({ project, index, isVisible }) => {
+
+  // State for card flip and hover effect
   const [isFlipped, setIsFlipped] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
+  // Pre-generate floating dot positions to avoid randomness on every render
   const [dotPositions] = useState(() =>
     [...Array(5)].map(() => ({
       left: Math.random() * 90,
@@ -85,6 +91,8 @@ const ProjectCard: React.FC<{
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+
+      {/* 3D card wrapper for flip effect */}
       <div className={`relative w-full h-full transition-transform duration-1500 transform-style-preserve-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
 
         {/* Front of Card */}
@@ -92,11 +100,13 @@ const ProjectCard: React.FC<{
           <div className="relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all
                           duration-500 border border-gray-200/50 dark:border-gray-700/50 h-full group-hover:scale-105 transform">
             
-            {/* Project Image */}
+            {/* Project Image Section */}
             <div className="relative h-40 overflow-hidden bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500">
+              
+              {/* Dark overlay on hover */}
               <div className={`absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent transition-transform duration-500 ${isHovered ? 'scale-110' : ''}`}></div>
 
-              {/* Floating Elements */}
+              {/* Floating decorative dots */}
               <div className="absolute inset-0 pointer-events-none">
                 {dotPositions.map((pos, i) => (
                   <div
@@ -111,7 +121,7 @@ const ProjectCard: React.FC<{
                 ))}
               </div>
               
-              {/* Status Badge */}
+              {/* Status badge */}
               <div className="absolute top-4 left-4 animate-fadeInLeft" style={{ animationDelay: '0.3s' }}>
                 <span className={`px-3 py-1 rounded-full text-xs font-semibold inline-block backdrop-blur-sm cursor-default ${
                   project.status === 'live' ? 'bg-emerald-500/90 text-white animate-pulse-slow' :
@@ -124,7 +134,7 @@ const ProjectCard: React.FC<{
                 </span>
               </div>
 
-              {/* Action Buttons */}
+              {/* Action buttons: Live & GitHub links */}
               <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-500 animate-fadeInRight">
                 {project.liveUrl && (
                   <a
@@ -148,7 +158,7 @@ const ProjectCard: React.FC<{
                 )}
               </div>
 
-              {/* Flip Button */}
+              {/* Flip button */}
               <button 
                 onClick={() => setIsFlipped(true)}
                 className="absolute bottom-4 right-4 p-2 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/30 transition-all duration-300 opacity-0 group-hover:opacity-100 hover:scale-110"
@@ -157,7 +167,7 @@ const ProjectCard: React.FC<{
               </button>
             </div>
 
-            {/* Project Info */}
+            {/* Project Info: title, description, technologies */}
             <div className="p-6">
               <h3 className="font-bold text-xl mb-3 text-gray-900 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors duration-300">
                 {project.title}
@@ -166,7 +176,7 @@ const ProjectCard: React.FC<{
                 {project.description}
               </p>
               
-              {/* Technologies */}
+              {/* Technologies used */}
               <div className="flex gap-2 flex-wrap">
                 {project.technologies.map((tech, techIndex) => (
                   <span 
@@ -185,6 +195,8 @@ const ProjectCard: React.FC<{
         {/* Back of Card */}
         <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180">
           <div className="relative bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl overflow-hidden shadow-lg h-full text-white p-6 flex flex-col justify-center">
+
+            {/* Flip back button */}
             <button 
               onClick={() => setIsFlipped(false)}
               className="absolute top-4 right-4 p-2 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/30 transition-all duration-300"
@@ -194,13 +206,13 @@ const ProjectCard: React.FC<{
 
             <h3 className="text-2xl font-bold mb-4 text-center">Project Stats</h3>
             
-            {/* Stats */}
+            {/* Project stats */}
             <div className="space-y-4">
               {project.stats?.rating && (
                 <div className="flex items-center justify-between p-3 bg-white/10 backdrop-blur-sm rounded-lg">
                   <div className="flex items-center gap-2">
                     <Star size={18} />
-                    <span>Active Users</span>
+                    <span>Rating</span>
                   </div>
                   <span className="font-bold text-xl">{project.stats.rating}</span>
                 </div>
@@ -237,10 +249,12 @@ const ProjectCard: React.FC<{
   );
 };
 
+// Main component for recent projects section
 export const RecentProjects: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false); // Track if container is in viewport
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Intersection Observer to trigger fade-in animation when container is visible
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -263,6 +277,7 @@ export const RecentProjects: React.FC = () => {
       ref={containerRef}
       className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 hover:shadow-xl transition-all duration-500"
     >
+      {/* Section header */}
       <div className="flex items-center justify-between mb-8">
         <h2 className={`text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-3 ${isVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
           <div className="relative">
@@ -279,6 +294,7 @@ export const RecentProjects: React.FC = () => {
         </div>
       </div>
 
+      {/* Grid of project cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {Projects.map((project, index) => (
           <ProjectCard 
