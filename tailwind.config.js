@@ -6,7 +6,12 @@ export default {
   ],
   darkMode: 'class',
   theme: {
-    extend: {},
+    extend: {
+      transitionDuration: {
+        1500: '1500ms',
+        3000: '3000ms'
+      },
+    },
   },
   plugins: [],
 }

@@ -62,22 +62,44 @@ const AnimatedProgressBar: React.FC<{
 
   const Icon = skill.icon;
 
-   return (
-    <div className={`group transition-all duration-300 ${isVisible ? 'opacity-1`' : 'opacity-0'}`} style={{ animationDelay: `${index * 0.1}s` }}>
+  return (
+    <div className={`group/skill transition-all duration-300 hover:scale-[1.01]`}>
       <div className="flex justify-between items-center mb-3">
         <div className="flex items-center gap-3">
-          <div className={`w-8 h-8 rounded-lg bg-gradient-to-r ${skill.color} flex items-center justify-center`}>
+          <div className={`w-8 h-8 rounded-lg bg-gradient-to-r ${skill.color} flex items-center justify-center group-hover/skill:rotate-12 transition-all duration-300`}>
             <Icon className="w-4 h-4 text-white" />
           </div>
-          <span className="font-semibold">{skill.name}</span>
+          <span className="font-semibold text-gray-700 dark:text-gray-300 group-hover/skill:text-blue-600 dark:group-hover/skill:text-blue-400 transition-colors">
+            {skill.name}
+          </span>
         </div>
-        <div className={`text-sm font-bold text-white bg-gradient-to-r ${skill.color} px-3 py-1 rounded-full`}>
+        <div className={`text-sm font-bold text-white bg-gradient-to-r ${skill.color} px-3 py-1 rounded-full shadow-lg transition-all duration-300`}>
           {displayLevel}%
         </div>
       </div>
-
-      <div className="relative h-3 bg-gray-200 rounded-full overflow-hidden">
-        <div className={`absolute top-0 left-0 h-full bg-gradient-to-r ${skill.color} rounded-full transition-all duration-700`} style={{ width: `${width}%` }} />
+      
+      <div className="relative h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden transition-all duration-300">
+        {/* Background shimmer effect */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover/skill:translate-x-[200%] transition-transform duration-1000"></div>
+        
+        {/* Progress bar */}
+        <div 
+          className={`absolute top-0 left-0 h-full bg-gradient-to-r ${skill.color} rounded-full transition-all duration-1500 ease-out shadow-lg group-hover/skill:shadow-xl`}
+          style={{ width: `${width}%` }}
+        >
+          {/* Shine effect */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shine"></div>
+        </div>
+        
+        {/* Skill level indicators */}
+        <div className="absolute inset-0 flex justify-between items-center px-1">
+          {[25, 50, 75].map((marker) => (
+            <div 
+              key={marker}
+              className="w-0.5 h-1 bg-white/30 rounded-full"
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
