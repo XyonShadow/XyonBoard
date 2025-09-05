@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './RecentProjects.css';
+import { Star } from 'lucide-react';
 
 interface Project {
   id: string;
@@ -108,6 +109,22 @@ export const RecentProjects: React.FC = () => {
       ref={containerRef}
       className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 hover:shadow-xl transition-all duration-500"
     >
+      <div className="flex items-center justify-between mb-8">
+        <h2 className={`text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-3 ${isVisible ? 'animate-fadeInLeft' : 'opacity-0'}`}>
+          <div className="relative">
+            <Star className="w-6 h-6 text-yellow-500 animate-spin" style={{animationDuration:'8s'}}/>
+            <div className="absolute inset-0 w-6 h-6 text-yellow-300 animate-ping opacity-30"></div>
+          </div>
+          <span>Featured Projects</span>
+        </h2>
+        <div className={`${isVisible ? 'animate-fadeInRight' : 'opacity-0'}`}>
+          <button className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300
+                            text-sm font-semibold link-underline hover:scale-110 transition-all duration-300">
+            View All Projects
+          </button>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {Projects.map((project, index) => (
           <ProjectCard 
