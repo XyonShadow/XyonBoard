@@ -3,6 +3,7 @@ import { Folder, Download, Mail, ChevronRight } from 'lucide-react';
 import { HeroSection } from '../components/dashboard/HeroSection';
 import { StatsCards } from '../components/dashboard/StatsCards';
 import { SkillsOverview } from '../components/dashboard/SkillsOverview';
+import { RecentProjects } from '../components/dashboard/RecentProjects';
 
 const quickActions = [
   { label: 'View All Projects', icon: Folder, gradient: 'from-blue-500 to-blue-600' },
@@ -54,6 +55,8 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <RecentProjects />
     </div>
   );
 };
