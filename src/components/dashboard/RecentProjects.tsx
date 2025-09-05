@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './RecentProjects.css';
-import { Star } from 'lucide-react';
+import { ExternalLink, Github, Star } from 'lucide-react';
 
 interface Project {
   id: string;
@@ -72,6 +72,68 @@ const ProjectCard: React.FC<{
                     opacity-0 ${isVisible ? 'animate-fadeInUp' : 'opacity-0 translate-y-8'}`}
                     style={{ animationDelay: `${index * 0.2}s` }}
     >
+      {/* Gradient baackground */}
+      <div className="relative h-48 overflow-hidden bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 z-[-2]">
+        <div className={`absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent transition-transform duration-500`}></div>
+        
+        {/* Floating Elements */}
+        <div className="absolute inset-0 pointer-events-none z-[-1]">
+          {[...Array(5)].map((_, i) => {
+            const left = Math.random() * 90;
+            const top = Math.random() * 90;
+            
+            return (
+              <div
+                key={i}
+                className={`absolute w-2 h-2 bg-white/30 rounded-full animate-float-${i + 1}`}
+                style={{
+                  left: `${left}%`,
+                  top: `${top}%`,
+                  animationDelay: `${Math.random() * 2}s`
+                }}
+              />
+            );
+          })}
+        </div>
+        
+        {/* Status Badge */}
+        <div className="absolute top-4 left-4 animate-fadeInLeft" style={{ animationDelay: '0.3s' }}>
+          <span className={`px-3 py-1 rounded-full text-xs font-semibold inline-block backdrop-blur-sm cursor-default ${
+            project.status === 'live' ? 'bg-emerald-500/90 text-white animate-pulse-slow' :
+            project.status === 'featured' ? 'bg-yellow-500/90 text-black animate-glow' :
+            'bg-blue-500/90 text-white animate-bounceGentle'
+          }`}>
+            {project.status === 'live' ? 'Live' : 
+              project.status === 'featured' ? 'Featured' : 
+              'In Development'}
+          </span>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-500 animate-fadeInRight">
+          {project.liveUrl && (
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2 bg-white/20 backdrop-blur-sm rounded-lg text-white hover:bg-emerald-500 transition-all duration-300 hover:scale-125 hover:rotate-12"
+            >
+              <ExternalLink size={16} />
+            </a>
+          )}
+          {project.githubUrl && (
+            <a
+              href={project.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2 bg-white/20 backdrop-blur-sm rounded-lg text-white hover:bg-gray-700 transition-all duration-300 hover:scale-125 hover:rotate-12"
+            >
+              <Github size={16} />
+            </a>
+          )}
+        </div>
+      </div>
+
       <h3 className="font-bold text-xl mb-2 text-gray-900 dark:text-white">{project.title}</h3>
       <p className="text-gray-600 dark:text-gray-400 text-sm">{project.description}</p>
       <div className="flex gap-2 mt-2 flex-wrap">
