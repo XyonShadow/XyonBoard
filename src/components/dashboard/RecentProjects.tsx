@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './RecentProjects.css';
-import { ExternalLink, Github, Star, ArrowLeft, TrendingUp } from 'lucide-react';
+import { ExternalLink, Github, Star, Calendar, ArrowLeft, TrendingUp } from 'lucide-react';
 
 interface Project {
   id: string;
@@ -193,6 +193,43 @@ const ProjectCard: React.FC<{
             </button>
 
             <h3 className="text-2xl font-bold mb-4 text-center">Project Stats</h3>
+            
+            {/* Stats */}
+            <div className="space-y-4">
+              {project.stats?.rating && (
+                <div className="flex items-center justify-between p-3 bg-white/10 backdrop-blur-sm rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <Star size={18} />
+                    <span>Active Users</span>
+                  </div>
+                  <span className="font-bold text-xl">{project.stats.rating}</span>
+                </div>
+              )}
+              
+              {project.stats?.growth && (
+                <div className="flex items-center justify-between p-3 bg-white/10 backdrop-blur-sm rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <TrendingUp size={18} />
+                    <span>Growth Rate</span>
+                  </div>
+                  <span className="font-bold text-xl text-green-300">{project.stats.growth}</span>
+                </div>
+              )}
+              
+              {project.stats?.completion && (
+                <div className="flex items-center justify-between p-3 bg-white/10 backdrop-blur-sm rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <Calendar size={18} />
+                    <span>Completion</span>
+                  </div>
+                  <span className="font-bold text-xl">{project.stats.completion}</span>
+                </div>
+              )}
+            </div>
+
+            <div className="mt-6 text-center">
+              <p className="text-sm opacity-80">Click the links above to explore this project!</p>
+            </div>
           </div>
         </div>
       </div>
