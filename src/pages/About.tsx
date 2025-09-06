@@ -49,6 +49,13 @@ const projects = [
   }
 ];
 
+const skills = [
+  { name: 'Frontend Development', icon: Code, level: 70, color: 'from-blue-500 to-cyan-500' },
+  { name: 'Backend Development', icon: Server, level: 50, color: 'from-green-500 to-emerald-500' },
+  { name: 'UI/UX Design', icon: Palette, level: 60, color: 'from-purple-500 to-pink-500' },
+  { name: 'Database Design', icon: Database, level: 55, color: 'from-orange-500 to-red-500' }
+];
+
 const About: React.FC = () => {
   type TabKey = 'story' | 'techStack' | 'projects';
   const [activeTab, setActiveTab] = useState<TabKey>('story');
@@ -127,8 +134,8 @@ const About: React.FC = () => {
         </div>
       </div>
 
+      {/* Main Content */}
       <div className="max-w-6xl mx-auto px-6 py-16 space-y-20">
-
         {/* Personal Stats */}
         <div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
@@ -282,6 +289,42 @@ const About: React.FC = () => {
                   </div>
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+
+        {/* Skills Section */}
+        <div>
+          <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">Core Skills</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {skills.map((skill) => {
+                const Icon = skill.icon;
+                return (
+                  <div key={skill.name} className="space-y-4">
+                    <div className="flex items-center gap-4">
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${skill.color} flex items-center justify-center`}>
+                        <Icon className="w-6 h-6 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex justify-between items-center mb-2">
+                          <span className="font-semibold text-gray-900 dark:text-white">{skill.name}</span>
+                          <span className={`text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r ${skill.color}`}>
+                            {skill.level}%
+                          </span>
+                        </div>
+                        <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                          <div className={`h-full bg-gradient-to-r ${skill.color} rounded-full`}
+                            style={{ 
+                              width: `${skill.level}%`,
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
