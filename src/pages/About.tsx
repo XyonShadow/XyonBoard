@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { User, Code, Palette, Server, Github, Mail, Coffee, Target, Heart, Zap, Award, Database, GitBranch, LayoutTemplate, Rocket, ArrowRight } from 'lucide-react';
 
 const personalStats = [
@@ -57,6 +57,37 @@ const skills = [
 ];
 
 const About: React.FC = () => {
+  const [visibleSections, setVisibleSections] = useState<boolean[]>([]);
+  const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const observers = sectionRefs.current.map((ref, index) => {
+      if (!ref) return null;
+      
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              setVisibleSections(prev => {
+                const newVisible = [...prev];
+                newVisible[index] = true;
+                return newVisible;
+              });
+            }, index * 200);
+          }
+        },
+        { threshold: 0.2 }
+      );
+      
+      observer.observe(ref);
+      return observer;
+    });
+
+    return () => {
+      observers.forEach(observer => observer?.disconnect());
+    };
+  }, []);
+  
   type TabKey = 'story' | 'techStack' | 'projects';
   const [activeTab, setActiveTab] = useState<TabKey>('story');
 
@@ -69,7 +100,10 @@ const About: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-purple-900/20">
       {/* Hero Section */}
-      <div className={`relative overflow-hidden bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white py-20`}>
+      <div
+        ref={el => {sectionRefs.current[0] = el}}
+        className={`relative overflow-hidden bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white py-20 opacity-0 ${visibleSections[0] ? 'animate-fadeInUp' : 'opacity-0'}`}
+      >
         <div className="absolute inset-0 bg-black/20" />
         
         {/* Animated Background Elements */}
@@ -79,20 +113,20 @@ const About: React.FC = () => {
         <div className="relative z-10 max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
-              <div className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+              <div className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 animate-fadeInLeft">
                 <User className="w-4 h-4" />
                 <span className="text-sm font-medium">About Me</span>
               </div>
               
-              <h1 className="text-5xl md:text-7xl font-black leading-tight">
+              <h1 className="text-5xl md:text-7xl font-black leading-tight opacity-0 animate-fadeInUp">
                 I'm <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400">Michael</span>
               </h1>
               
-              <p className="text-xl leading-relaxed">
+              <p className="text-xl leading-relaxed opacity-0 animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
                 A passionate developer who loves creating beautiful, functional, and user-centered digital experiences.
               </p>
               
-              <div className="flex items-center gap-6">
+              <div className="flex items-center gap-3 opacity-0 animate-fadeInUp" style={{animationDelay: '0.4s'}}>
                 <div className="flex items-center gap-2">
                   <div className="flex items-center justify-center w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg text-white hover:bg-gray-700 transition-all duration-300 hover:scale-110 hover:rotate-12 cursor-pointer">
                     <Mail className="w-5 h-5" />
@@ -111,7 +145,7 @@ const About: React.FC = () => {
             </div>
             
             {/* Profile Image Placeholder with Animation */}
-            <div className="relative">
+            <div className="relative animate-fadeInRight">
               <div className="w-80 h-80 mx-auto relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full animate-spin opacity-20" style={{animationDuration: '8s'}}/>
                 <div className="absolute inset-4 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-8xl font-bold animate-float">
@@ -137,14 +171,17 @@ const About: React.FC = () => {
       {/* Main Content */}
       <div className="max-w-6xl mx-auto px-6 py-16 space-y-20">
         {/* Personal Stats */}
-        <div>
+        <div
+          ref={el => {sectionRefs.current[1] = el}}
+          className={`opacity-0 ${visibleSections[1] ? 'animate-fadeInUp' : 'opacity-0'}`}
+        >
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {personalStats.map((stat) => {
               const Icon = stat.icon;
               return (
                 <div 
                   key={stat.label}
-                  className={`bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 hover:scale-105 transform transition-all duration-500 text-center group`}
+                  className={`bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 hover:scale-105 transform transition-all duration-500 text-center group opacity-0 animate-fadeInUp`}
                 >
                   <Icon className="w-8 h-8 mx-auto mb-3 text-blue-600 group-hover:scale-125 transition-transform duration-300" />
                   <div className="text-2xl font-bold text-gray-900 dark:text-white mb-1">{stat.value}</div>
@@ -156,7 +193,10 @@ const About: React.FC = () => {
         </div>
 
         {/* Main Content Tabs */}
-        <div>
+        <div 
+          ref={el => {sectionRefs.current[2] = el}}
+          className={`opacity-0 ${visibleSections[2] ? 'animate-fadeInUp' : 'opacity-0'}`}
+        >
           <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
             {/* Tab Navigation */}
             <div className="flex border-b border-gray-200/50 dark:border-gray-700/50">
@@ -294,29 +334,45 @@ const About: React.FC = () => {
         </div>
 
         {/* Skills Section */}
-        <div>
+        <div
+          ref={el => {sectionRefs.current[3] = el}}
+          className={`opacity-0 ${visibleSections[3] ? 'animate-fadeInUp' : 'opacity-0'}`}
+        >
           <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">Core Skills</h2>
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center animate-fadeIn">Core Skills</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {skills.map((skill) => {
+              {skills.map((skill, index) => {
                 const Icon = skill.icon;
                 return (
                   <div key={skill.name} className="space-y-4">
                     <div className="flex items-center gap-4">
-                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${skill.color} flex items-center justify-center`}>
+                      {/* Skill Icon with hover effect */}
+                      <div
+                        className={`w-12 h-12 rounded-xl bg-gradient-to-r ${skill.color} flex items-center justify-center transform transition-transform duration-300 hover:scale-110`}
+                      >
                         <Icon className="w-6 h-6 text-white" />
                       </div>
+
                       <div className="flex-1">
+                        {/* Skill Title + Level */}
                         <div className="flex justify-between items-center mb-2">
-                          <span className="font-semibold text-gray-900 dark:text-white">{skill.name}</span>
-                          <span className={`text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r ${skill.color}`}>
+                          <span className="font-semibold text-gray-900 dark:text-white">
+                            {skill.name}
+                          </span>
+                          <span
+                            className={`text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r ${skill.color}`}
+                          >
                             {skill.level}%
                           </span>
                         </div>
+
+                        {/* Skill Progress Bar */}
                         <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                          <div className={`h-full bg-gradient-to-r ${skill.color} rounded-full`}
+                          <div
+                            className={`h-full bg-gradient-to-r ${skill.color} rounded-full transition-[width] duration-700 ease-out`}
                             style={{ 
-                              width: `${skill.level}%`,
+                              width: visibleSections[3] ? `${skill.level}%` : '0%',
+                              transitionDelay: `${index * 200}ms`
                             }}
                           />
                         </div>
