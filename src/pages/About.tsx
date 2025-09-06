@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User, Code, Palette, Server, Github, Mail, Coffee, Target, Heart, Zap } from 'lucide-react';
+import { User, Code, Palette, Server, Github, Mail, Coffee, Target, Heart, Zap, Award, Database, GitBranch, LayoutTemplate, Rocket, ArrowRight } from 'lucide-react';
 
 const personalStats = [
   { label: 'Coffee Cups', value: '847', icon: Coffee },
@@ -8,12 +8,55 @@ const personalStats = [
   { label: 'Happy Users', value: '20+', icon: Heart }
 ];
 
+const techStack = [
+  {
+    category: 'Frontend',
+    skills: [
+      { name: 'React', level: 'Intermediate', description: 'Building dynamic UIs with hooks, context, and reusable components.', icon: <LayoutTemplate className="w-6 h-6 text-blue-500" /> },
+      { name: 'TypeScript', level: 'Intermediate', description: 'Writing strongly-typed React code for safer and more maintainable projects.', icon: <Code className="w-6 h-6 text-indigo-500" /> },
+      { name: 'JavaScript (ES6+)', level: 'Intermediate', description: 'Confident in modern JS features like async/await, spread/rest, and destructuring.', icon: <Code className="w-6 h-6 text-yellow-500" /> },
+      { name: 'Tailwind CSS', level: 'Intermediate', description: 'Creating responsive, beautiful layouts quickly with utility-first CSS.', icon: <LayoutTemplate className="w-6 h-6 text-cyan-500" /> },
+    ]
+  },
+  {
+    category: 'Backend & Tools',
+    skills: [
+      { name: 'Node.js', level: 'Beginner', description: 'Learning to build REST APIs and simple backend logic.', icon: <Server className="w-6 h-6 text-green-500" /> },
+      { name: 'Firebase', level: 'Beginner', description: 'Using Firebase Auth & Firestore for authentication and data storage.', icon: <Database className="w-6 h-6 text-orange-500" /> },
+      { name: 'Git & GitHub', level: 'Intermediate', description: 'Version control, branching, and collaborative workflows.', icon: <GitBranch className="w-6 h-6 text-pink-500" /> },
+    ]
+  }
+];
+
+const projects = [
+  {
+    name: 'NovaBoard',
+    description: 'A modern React + TypeScript dashboard with dark/light mode, modular widgets, and real-time data visualization.',
+    technologies: ['React', 'TypeScript', 'Tailwind CSS'],
+    link: 'https://github.com/XyonShadow/NovaBoard'
+  },
+  {
+    name: 'NovaStore',
+    description: 'A dynamic e-commerce site with Firebase authentication, product filtering, and admin dashboard for store management.',
+    technologies: ['HTML', 'CSS', 'JavaScript', 'Firebase'],
+    link: 'https://github.com/XyonShadow/NovaStore'
+  },
+  {
+    name: 'Portfolio Website',
+    description: 'My personal developer portfolio showcasing projects, skills, and contact information.',
+    technologies: ['HTML', 'CSS', 'JavaScript'],
+    link: 'https://github.com/XyonShadow/Portfolio-site'
+  }
+];
+
 const About: React.FC = () => {
-  type TabKey = 'story' | 'techStack';
+  type TabKey = 'story' | 'techStack' | 'projects';
   const [activeTab, setActiveTab] = useState<TabKey>('story');
 
   const tabs: { key: TabKey; label: string; icon: React.ElementType }[] = [
     { key: 'story', label: 'My Story', icon: User },
+    { key: 'techStack', label: 'Stack & Workflow', icon: Award },
+    { key: 'projects', label: 'Featured Projects', icon: Rocket },
   ];
 
   return (
@@ -105,7 +148,7 @@ const About: React.FC = () => {
           </div>
         </div>
 
-        {/* Main Content */}
+        {/* Main Content Tabs */}
         <div>
           <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
             {/* Tab Navigation */}
@@ -129,8 +172,8 @@ const About: React.FC = () => {
               })}
             </div>
 
-            {/* Story Section */}
             <div className="p-8">
+              {/* Story Tab */}
               {activeTab === 'story' && (
                 <div className="space-y-6 animate-fadeIn">
                   <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">My Journey</h2>
@@ -164,6 +207,78 @@ const About: React.FC = () => {
                         ))}
                       </ul>
                     </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Tech Stack Tab */}
+              {activeTab === 'techStack' && (
+                <div className="space-y-6 animate-fadeIn">
+                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+                    Tech Stack & Skills
+                  </h2>
+
+                  {techStack.map((category, categoryIndex) => (
+                    <div key={categoryIndex} className="space-y-4">
+                      <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+                        {category.category}
+                      </h3>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {category.skills.map((tech, skillIndex) => (
+                          <div
+                            key={skillIndex}
+                            className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 p-4 rounded-xl shadow-sm border border-gray-200/40 dark:border-gray-700/50 hover:scale-105 hover:shadow-md transition-all"
+                          >
+                            {/* Icon */}
+                            <div className="mb-3">{tech.icon}</div>
+
+                            {/* Name & Level */}
+                            <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+                              {tech.name}
+                            </h4>
+                            <p className="text-sm text-blue-600 dark:text-blue-400 font-medium">
+                              {tech.level}
+                            </p>
+
+                            {/* Description */}
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 leading-relaxed">
+                              {tech.description}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Projects Tab */}
+              {activeTab === 'projects' && (
+                <div className="space-y-8 animate-fadeIn">
+                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Featured Projects</h2>
+                  <div className="space-y-8">
+                    {projects.map((project, index) => (
+                      <div key={index} className="relative pl-8 pb-8 border-l-2 border-blue-500 last:border-l-0 last:pb-0">
+                        <div className="absolute -left-2 top-0 w-4 h-4 bg-blue-500 rounded-full"></div>
+                        <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 p-6 rounded-xl border border-blue-200/50 dark:border-blue-800/50">
+                          <h3 className="text-xl font-bold text-gray-900 dark:text-white">{project.name}</h3>
+                          <p className="text-gray-600 dark:text-gray-400 mb-4">{project.description}</p>
+
+                          <div className="flex gap-2 flex-wrap mb-4">
+                            {project.technologies.map((tech, i) => (
+                              <span key={i} className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 text-sm rounded-full">
+                                {tech}
+                              </span>
+                            ))}
+                          </div>
+
+                          <a href={project.link} target="_blank" rel="noopener noreferrer" className="inline-flex gap-0.5 items-center text-blue-600 dark:text-blue-400 link-underline-90">
+                            View on GitHub <ArrowRight size={16} className="mt-0.5"/>
+                          </a>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}
