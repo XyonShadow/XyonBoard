@@ -1,5 +1,12 @@
 import React from 'react';
-import { User, Code, Palette, Server, Github, Mail } from 'lucide-react';
+import { User, Code, Palette, Server, Github, Mail, Coffee, Target, Heart } from 'lucide-react';
+
+const personalStats = [
+  { label: 'Coffee Cups', value: '847', icon: Coffee },
+  { label: 'Lines of Code', value: '50K+', icon: Code },
+  { label: 'Projects Completed', value: '12', icon: Target },
+  { label: 'Happy Users', value: '20+', icon: Heart }
+];
 
 const About: React.FC = () => {
   return (
@@ -66,6 +73,28 @@ const About: React.FC = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-6 py-16 space-y-20">
+
+        {/* Personal Stats */}
+        <div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            {personalStats.map((stat) => {
+              const Icon = stat.icon;
+              return (
+                <div 
+                  key={stat.label}
+                  className={`bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 hover:scale-105 transform transition-all duration-500 text-center group`}
+                >
+                  <Icon className="w-8 h-8 mx-auto mb-3 text-blue-600 group-hover:scale-125 transition-transform duration-300" />
+                  <div className="text-2xl font-bold text-gray-900 dark:text-white mb-1">{stat.value}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">{stat.label}</div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
