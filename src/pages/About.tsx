@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, Code, Palette, Server, Github, Mail, Coffee, Target, Heart } from 'lucide-react';
+import { User, Code, Palette, Server, Github, Mail, Coffee, Target, Heart, Zap } from 'lucide-react';
 
 const personalStats = [
   { label: 'Coffee Cups', value: '847', icon: Coffee },
@@ -95,6 +95,51 @@ const About: React.FC = () => {
                 </div>
               );
             })}
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div>
+          <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
+            {/* Story Section */}
+            <div className="p-8">
+              <div className="mt-12 px-4 sm:px-6 lg:px-8">
+                <div className="space-y-6 animate-fadeIn">
+                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">My Journey</h2>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div className="space-y-4">
+                      <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+                        "Xyon" means "above" — and for me, it;s a reminder to always aim higher, learn more,and grow with every project I
+                        take on. My journey into development really started with curiosity, exploring how websites and apps worked and
+                        trying to recreate them on my own.  
+                      </p>
+                      <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+                        I'm still early in my journey as a developer, but each project I work on teaches me something new, from
+                        problem-solving and writing cleaner code, to understanding the people who will use what I build. My goal is to keep
+                        improving, keep experimenting, and create work that reflects progress, not perfection.
+                      </p>
+                    </div>
+                    <div className="space-y-4">
+                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white">What Drives Me</h3>
+                      <ul className="space-y-3">
+                        {[
+                          'Creating intuitive user experiences',
+                          'Solving complex technical challenges',
+                          'Mentoring upcoming developers',
+                          'Building sustainable, scalable solutions',
+                          'Staying ahead of technology trends'
+                        ].map((item, index) => (
+                          <li key={index} className="flex items-start gap-3">
+                            <Zap className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
+                            <span className="text-gray-600 dark:text-gray-400">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
