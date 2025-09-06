@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { User, Code, Palette, Server, Github, Mail, Coffee, Target, Heart, Zap } from 'lucide-react';
 
 const personalStats = [
@@ -9,6 +9,13 @@ const personalStats = [
 ];
 
 const About: React.FC = () => {
+  type TabKey = 'story' | 'techStack';
+  const [activeTab, setActiveTab] = useState<TabKey>('story');
+
+  const tabs: { key: TabKey; label: string; icon: React.ElementType }[] = [
+    { key: 'story', label: 'My Story', icon: User },
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-purple-900/20">
       {/* Hero Section */}
@@ -101,9 +108,30 @@ const About: React.FC = () => {
         {/* Main Content */}
         <div>
           <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
+            {/* Tab Navigation */}
+            <div className="flex border-b border-gray-200/50 dark:border-gray-700/50">
+              {tabs.map((tab) => {
+                const Icon = tab.icon;
+                return (
+                  <button
+                    key={tab.key}
+                    onClick={() => setActiveTab(tab.key)}
+                    className={`flex-1 px-6 py-4 font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
+                      activeTab === tab.key
+                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
+                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    <Icon className="w-4 h-4" />
+                    {tab.label}
+                  </button>
+                );
+              })}
+            </div>
+
             {/* Story Section */}
             <div className="p-8">
-              <div className="mt-12 px-4 sm:px-6 lg:px-8">
+              {activeTab === 'story' && (
                 <div className="space-y-6 animate-fadeIn">
                   <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">My Journey</h2>
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -138,7 +166,7 @@ const About: React.FC = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
