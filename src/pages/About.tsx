@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { User, Code, Palette, Server, Github, Mail, Coffee, Target, Heart, Zap, Award, Database, GitBranch, LayoutTemplate, Rocket, ArrowRight } from 'lucide-react';
 
+// Personal stats data
 const personalStats = [
   { label: 'Coffee Cups', value: '847', icon: Coffee },
   { label: 'Lines of Code', value: '50K+', icon: Code },
@@ -8,6 +9,7 @@ const personalStats = [
   { label: 'Happy Users', value: '20+', icon: Heart }
 ];
 
+// Tech stack data
 const techStack = [
   {
     category: 'Frontend',
@@ -28,6 +30,7 @@ const techStack = [
   }
 ];
 
+// Featured projects data
 const projects = [
   {
     name: 'NovaBoard',
@@ -49,6 +52,7 @@ const projects = [
   }
 ];
 
+// Core skills data for progress bars
 const skills = [
   { name: 'Frontend Development', icon: Code, level: 70, color: 'from-blue-500 to-cyan-500' },
   { name: 'Backend Development', icon: Server, level: 50, color: 'from-green-500 to-emerald-500' },
@@ -57,16 +61,19 @@ const skills = [
 ];
 
 const About: React.FC = () => {
+  // Track visibility of sections for intersection observer animations
   const [visibleSections, setVisibleSections] = useState<boolean[]>([]);
-  const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const sectionRefs = useRef<(HTMLDivElement | null)[]>([]); // Refs for each section
 
   useEffect(() => {
+    // Set up intersection observers for each section
     const observers = sectionRefs.current.map((ref, index) => {
       if (!ref) return null;
-      
+
       const observer = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
+            // Delay animation slightly based on section index
             setTimeout(() => {
               setVisibleSections(prev => {
                 const newVisible = [...prev];
@@ -78,16 +85,18 @@ const About: React.FC = () => {
         },
         { threshold: 0.2 }
       );
-      
+
       observer.observe(ref);
       return observer;
     });
 
+    // Cleanup observers on unmount
     return () => {
       observers.forEach(observer => observer?.disconnect());
     };
   }, []);
-  
+
+  // Tabs for main content
   type TabKey = 'story' | 'techStack' | 'projects';
   const [activeTab, setActiveTab] = useState<TabKey>('story');
 
@@ -101,32 +110,35 @@ const About: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-purple-900/20">
       {/* Hero Section */}
       <div
-        ref={el => {sectionRefs.current[0] = el}}
+        ref={el => { sectionRefs.current[0] = el }}
         className={`relative overflow-hidden bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white py-20 opacity-0 ${visibleSections[0] ? 'animate-fadeInUp' : 'opacity-0'}`}
       >
-        <div className="absolute inset-0 bg-black/20" />
-        
-        {/* Animated Background Elements */}
+        <div className="absolute inset-0 bg-black/20" /> {/* Overlay */}
+
+        {/* Decorative floating elements */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -translate-y-32 translate-x-32 blur-3xl animate-float" />
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-yellow-300/20 rounded-full translate-y-32 -translate-x-16 blur-2xl animate-floatReverse" />
-        
+
         <div className="relative z-10 max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+            {/* Hero Text */}
             <div className="space-y-6">
               <div className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 animate-fadeInLeft">
                 <User className="w-4 h-4" />
                 <span className="text-sm font-medium">About Me</span>
               </div>
-              
+
               <h1 className="text-5xl md:text-7xl font-black leading-tight opacity-0 animate-fadeInUp">
                 I'm <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400">Michael</span>
               </h1>
-              
+
               <p className="text-xl leading-relaxed opacity-0 animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
                 A passionate developer who loves creating beautiful, functional, and user-centered digital experiences.
               </p>
-              
-              <div className="flex items-center gap-3 opacity-0 animate-fadeInUp" style={{animationDelay: '0.4s'}}>
+
+              {/* Contact buttons */}
+              <div className="flex items-center gap-3 opacity-0 animate-fadeInUp" style={{ animationDelay: '0.4s' }}>
                 <div className="flex items-center gap-2">
                   <div className="flex items-center justify-center w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg text-white hover:bg-gray-700 transition-all duration-300 hover:scale-110 hover:rotate-12 cursor-pointer">
                     <Mail className="w-5 h-5" />
@@ -143,16 +155,16 @@ const About: React.FC = () => {
                 </a>
               </div>
             </div>
-            
-            {/* Profile Image Placeholder with Animation */}
+
+            {/* Profile Image with animated floating icons */}
             <div className="relative animate-fadeInRight">
               <div className="w-80 h-80 mx-auto relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full animate-spin opacity-20" style={{animationDuration: '8s'}}/>
                 <div className="absolute inset-4 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-8xl font-bold animate-float">
                   👨‍💻
                 </div>
-                
-                {/* Floating Icons */}
+
+                {/* Floating skill icons */}
                 <div className="absolute -top-4 -right-4 bg-white/20 backdrop-blur-sm p-3 rounded-full animate-bounceGentle">
                   <Code className="w-6 h-6" />
                 </div>
@@ -170,9 +182,10 @@ const About: React.FC = () => {
 
       {/* Main Content */}
       <div className="max-w-6xl mx-auto px-6 py-16 space-y-20">
-        {/* Personal Stats */}
+
+        {/* Personal Stats Section */}
         <div
-          ref={el => {sectionRefs.current[1] = el}}
+          ref={el => { sectionRefs.current[1] = el }}
           className={`opacity-0 ${visibleSections[1] ? 'animate-fadeInUp' : 'opacity-0'}`}
         >
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
@@ -192,12 +205,14 @@ const About: React.FC = () => {
           </div>
         </div>
 
-        {/* Main Content Tabs */}
+        {/* Tabs Section */}
         <div 
-          ref={el => {sectionRefs.current[2] = el}}
+          ref={el => { sectionRefs.current[2] = el }}
           className={`opacity-0 ${visibleSections[2] ? 'animate-fadeInUp' : 'opacity-0'}`}
         >
+          {/* Tabs container */}
           <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
+
             {/* Tab Navigation */}
             <div className="flex border-b border-gray-200/50 dark:border-gray-700/50">
               {tabs.map((tab) => {
@@ -219,6 +234,7 @@ const About: React.FC = () => {
               })}
             </div>
 
+            {/* Tab Content */}
             <div className="p-8">
               {/* Story Tab */}
               {activeTab === 'story' && (
@@ -227,7 +243,7 @@ const About: React.FC = () => {
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div className="space-y-4">
                       <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
-                        "Xyon" means "above" — and for me, it;s a reminder to always aim higher, learn more,and grow with every project I
+                        "Xyon" means "above" — and for me, it's a reminder to always aim higher, learn more, and grow with every project I
                         take on. My journey into development really started with curiosity, exploring how websites and apps worked and
                         trying to recreate them on my own.  
                       </p>
@@ -312,6 +328,7 @@ const About: React.FC = () => {
                           <h3 className="text-xl font-bold text-gray-900 dark:text-white">{project.name}</h3>
                           <p className="text-gray-600 dark:text-gray-400 mb-4">{project.description}</p>
 
+                          {/* Tech badges */}
                           <div className="flex gap-2 flex-wrap mb-4">
                             {project.technologies.map((tech, i) => (
                               <span key={i} className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 text-sm rounded-full">
@@ -320,8 +337,9 @@ const About: React.FC = () => {
                             ))}
                           </div>
 
-                          <a href={project.link} target="_blank" rel="noopener noreferrer" className="inline-flex gap-0.5 items-center text-blue-600 dark:text-blue-400 link-underline-90">
-                            View on GitHub <ArrowRight size={16} className="mt-0.5"/>
+                          {/* Github Link */}
+                          <a href={project.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 font-medium hover:underline flex items-center gap-1">
+                            View on GitHub <ArrowRight className="w-4 h-4 mt-0.5" />
                           </a>
                         </div>
                       </div>
@@ -333,7 +351,7 @@ const About: React.FC = () => {
           </div>
         </div>
 
-        {/* Skills Section */}
+        {/* Core Skills Section with Progress Bars */}
         <div
           ref={el => {sectionRefs.current[3] = el}}
           className={`opacity-0 ${visibleSections[3] ? 'animate-fadeInUp' : 'opacity-0'}`}
@@ -384,6 +402,7 @@ const About: React.FC = () => {
             </div>
           </div>
         </div>
+
       </div>
     </div>
   );
