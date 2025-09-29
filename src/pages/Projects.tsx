@@ -21,9 +21,10 @@ interface Project {
 interface ProjectCardProps {
   project: Project;
   index: number;
+  isVisible: boolean;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, isVisible }) => {
   const [isHovered, setIsHovered] = useState(false);
   const views = useMemo(() => Math.floor(Math.random() * 1000) + 100, []);
   const [likes, setLikes] = useState(Math.floor(Math.random() * 50) + 10);
@@ -36,8 +37,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
 
   return (
     <div
-      className={`group relative h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-200/50 dark:border-gray-700/50 overflow-hidden hover:scale-105 transform`}
-      style={{ animationDelay: `${index * 0.1}s` }}
+      className={`group relative h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-200/50 dark:border-gray-700/50 overflow-hidden hover:scale-105 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+      style={{ transitionDelay: `${index * 0.1}s` }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -236,6 +237,35 @@ const Projects: React.FC = () => {
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
+  const [visibleProjects, setVisibleProjects] = useState<boolean[]>([]);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          // Set all projects visible with staggered delay
+          projects.forEach((_, index) => {
+            setTimeout(() => {
+              setVisibleProjects(prev => {
+                const newVisible = [...prev];
+                newVisible[index] = true;
+                return newVisible;
+              });
+            }, index * 100);
+          });
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-purple-900/20">
       {/* Hero Section */}
@@ -404,7 +434,7 @@ const Projects: React.FC = () => {
         </h2>
 
         {/* Projects Grid */}
-        <div>
+        <div ref={containerRef}>
           {filteredProjects.length > 0 ? (
             <div className={"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"}>
               {filteredProjects.map((project, index) => (
@@ -412,6 +442,7 @@ const Projects: React.FC = () => {
                   key={project.id}
                   project={project}
                   index={index}
+                  isVisible={visibleProjects[index] || false}
                 />
               ))}
             </div>
