@@ -1,7 +1,38 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MessageCircle } from "lucide-react";
 
 const Contact: React.FC = () => {
+  const [visibleSections, setVisibleSections] = useState<boolean[]>(new Array(4).fill(false));
+  const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
+  
+  useEffect(() => {
+    const observers = sectionRefs.current.map((ref, index) => {
+      if (!ref) return null;
+      
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              setVisibleSections(prev => {
+                const newVisible = [...prev];
+                newVisible[index] = true;
+                return newVisible;
+              });
+            }, index * 200);
+          }
+        },
+        { threshold: 0.2 }
+      );
+      
+      observer.observe(ref);
+      return observer;
+    });
+
+    return () => {
+      observers.forEach(observer => observer?.disconnect());
+    };
+  }, []);
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-purple-900/20">
       {/* Hero Section */}
