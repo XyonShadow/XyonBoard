@@ -1,7 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Github, Linkedin, Mail, MessageCircle } from "lucide-react";
+import { CheckCircle, ChevronDown, Github, Linkedin, Mail, MessageCircle, Send } from "lucide-react";
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Contact: React.FC = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
+    projectType: '',
+    budget: '',
+    timeline: ''
+  });
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [visibleSections, setVisibleSections] = useState<boolean[]>(new Array(4).fill(false));
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   
@@ -32,6 +45,36 @@ const Contact: React.FC = () => {
       observers.forEach(observer => observer?.disconnect());
     };
   }, []);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    // Simulate form submission
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    setSubmitStatus('success');
+    setIsSubmitting(false);
+    
+    // Reset form after success
+    setTimeout(() => {
+      setFormData({
+        name: '',
+        email: '',
+        subject: '',
+        message: '',
+        projectType: '',
+        budget: '',
+        timeline: ''
+      });
+      setSubmitStatus('idle');
+    }, 3000);
+  };
   
   type ConnectOption = {
     id: 'email' | 'github' | 'linkedin';
@@ -73,6 +116,29 @@ const Contact: React.FC = () => {
     },
   ];
 
+  const projectTypes = [
+    'Web Development',
+    'Mobile App',
+    'UI/UX Design',
+    'Full-Stack Application',
+    'API Development',
+    'Consulting',
+    'Other'
+  ];
+  const projectTypeOptions = projectTypes.map(type => ({ value: type, label: type }));
+
+  const budgetRanges = [
+    '$500 - $1,000',
+    '$1,000 - $2,000',
+    '$2,000 - $5,000',
+    '$5,000+',
+    'Let\'s discuss'
+  ];
+  const budgetOptions = budgetRanges.map(range => ({ value: range, label: range }));
+
+  const [isProjectTypeOpen, setIsProjectTypeOpen] = useState(false);
+  const [isBudgetOpen, setIsBudgetOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-purple-900/20">
       {/* Hero Section */}
@@ -111,6 +177,7 @@ const Contact: React.FC = () => {
         </div>
       </div>
 
+      {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-16 space-y-16"> 
         {/* Connect Options */}
         <div 
@@ -161,6 +228,244 @@ const Contact: React.FC = () => {
                 </a>
               );
             })}
+          </div>
+        </div>
+
+        <div>
+          {/* Contact Form */}
+          <div 
+            ref={el => {sectionRefs.current[1] = el}}
+            className={`xl:col-span-2 ${visibleSections[1] ? 'animate-fadeInLeft' : 'opacity-0'}`}
+          >
+            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6">
+                <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+                  <Send className="w-6 h-6" />
+                  Let's Start a Conversation
+                </h2>
+                <p className="text-blue-100 mt-2">Fill out the form below and I'll get back to you within 24 hours</p>
+              </div>
+
+              <div className="p-8">
+                {submitStatus === 'success' && (
+                  <div className="mb-6 p-4 bg-green-100 dark:bg-green-900/30 border border-green-300 dark:border-green-700 rounded-xl flex items-center gap-3 animate-fadeInDown">
+                    <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
+                    <span className="text-green-800 dark:text-green-200 font-medium">
+                      Message sent successfully! I'll get back to you soon.
+                    </span>
+                  </div>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Name and Email */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                        Full Name *
+                      </label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-4 py-3 bg-white/60 dark:bg-gray-700/60 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                        placeholder="John Doe"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                        Email Address *
+                      </label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-4 py-3 bg-white/60 dark:bg-gray-700/60 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                        placeholder="john@example.com"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Project Type and Budget */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                      {/* Project Type Dropdown */}
+                      <div className="relative">
+                        <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                          Project Type
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => setIsProjectTypeOpen(!isProjectTypeOpen)}
+                          className="w-full flex items-center justify-between px-4 py-3 bg-white/60 dark:bg-gray-700/60 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                        >
+                          <span className="text-gray-700 dark:text-gray-200">
+                            {projectTypeOptions.find((opt) => opt.value === formData.projectType)?.label || "Select project type"}
+                          </span>
+                          <motion.div
+                            animate={{ rotate: isProjectTypeOpen ? 180 : 0 }}
+                            transition={{ duration: 0.3 }}
+                          >
+                            <ChevronDown className="w-5 h-5 text-gray-500 dark:text-gray-300" />
+                          </motion.div>
+                        </button>
+
+                        <AnimatePresence>
+                          {isProjectTypeOpen && (
+                            <motion.div
+                              initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                              animate={{ opacity: 1, y: 0, scale: 1 }}
+                              exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                              transition={{ duration: 0.2 }}
+                              className="absolute z-10 mt-2 w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
+                            >
+                              {projectTypeOptions.map((option) => (
+                                <button
+                                  key={option.value}
+                                  type="button"
+                                  onClick={() => {
+                                    setFormData({ ...formData, projectType: option.value });
+                                    setIsProjectTypeOpen(false);
+                                  }}
+                                  className={`w-full text-left px-4 py-2 text-sm transition-colors duration-200 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-500 ${
+                                    formData.projectType === option.value
+                                      ? "bg-blue-100 dark:bg-blue-700"
+                                      : ""
+                                  }`}
+                                >
+                                  {option.label}
+                                </button>
+                              ))}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    </div>
+                    <div>
+                      {/* Budget Range Dropdown */}
+                      <div className="relative">
+                        <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                          Budget Range
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => setIsBudgetOpen(!isBudgetOpen)}
+                          className="w-full flex items-center justify-between px-4 py-3 bg-white/60 dark:bg-gray-700/60 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                        >
+                          <span className="text-gray-700 dark:text-gray-200">
+                            {budgetOptions.find((opt) => opt.value === formData.budget)?.label || "Select Budget Range"}
+                          </span>
+                          <motion.div
+                            animate={{ rotate: isBudgetOpen ? 180 : 0 }}
+                            transition={{ duration: 0.3 }}
+                          >
+                            <ChevronDown className="w-5 h-5 text-gray-500 dark:text-gray-300" />
+                          </motion.div>
+                        </button>
+
+                        <AnimatePresence>
+                          {isBudgetOpen && (
+                            <motion.div
+                              initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                              animate={{ opacity: 1, y: 0, scale: 1 }}
+                              exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                              transition={{ duration: 0.2 }}
+                              className="absolute z-10 mt-2 w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
+                            >
+                              {budgetOptions.map((option) => (
+                                <button
+                                  key={option.value}
+                                  type="button"
+                                  onClick={() => {
+                                    setFormData({ ...formData, budget: option.value });
+                                    setIsBudgetOpen(false);
+                                  }}
+                                  className={`w-full text-left px-4 py-2 text-sm transition-colors duration-200 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-500 ${
+                                    formData.budget === option.value
+                                      ? "bg-blue-100 dark:bg-blue-700"
+                                      : ""
+                                  }`}
+                                >
+                                  {option.label}
+                                </button>
+                              ))}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Subject */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                      Subject
+                    </label>
+                    <input
+                      type="text"
+                      name="subject"
+                      value={formData.subject}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 bg-white/60 dark:bg-gray-700/60 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                      placeholder="Brief description of your project"
+                    />
+                  </div>
+
+                  {/* Message */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                      Project Description *
+                    </label>
+                    <textarea
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      required
+                      rows={5}
+                      className="w-full px-4 py-3 bg-white/60 dark:bg-gray-700/60 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 resize-none"
+                      placeholder="Tell me about your project, goals, and any specific requirements..."
+                    />
+                  </div>
+
+                  {/* Timeline */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                      Timeline
+                    </label>
+                    <input
+                      type="text"
+                      name="timeline"
+                      value={formData.timeline}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 bg-white/60 dark:bg-gray-700/60 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                      placeholder="When do you need this completed? (e.g., 2-3 months)"
+                    />
+                  </div>
+
+                  {/* Submit Button */}
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className={`w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-8 rounded-xl font-bold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center gap-3 ${isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:scale-105 hover:shadow-lg'}`}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        Sending Message...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-5 h-5" />
+                        Send Message
+                      </>
+                    )}
+                  </button>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       </div>
