@@ -145,6 +145,25 @@ const Contact: React.FC = () => {
     { platform: 'Twitter', url: '#', icon: Twitter, color: 'hover:bg-blue-400' }
   ];
 
+  const FAQs = [
+    {
+      q: "What kind of projects do you take on?",
+      a: "I focus on full-stack web development — from frontend interfaces with React and Tailwind CSS to backend systems using Node.js, Express, and PostgreSQL."
+    },
+    {
+      q: "How soon can you start a project?",
+      a: "Depending on current workload, I can usually begin within a few days after finalizing project details and requirements."
+    },
+    {
+      q: "Do you provide ongoing support or maintenance?",
+      a: "Yes, I offer optional post-launch support for updates, bug fixes, and performance improvements."
+    },
+    {
+      q: "What’s your preferred way to communicate?",
+      a: "Email is best for most discussions. I’m also available for quick chats or scheduled meetings if needed."
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-purple-900/20">
       {/* Hero Section */}
@@ -562,6 +581,28 @@ const Contact: React.FC = () => {
                   Follow me for updates on my latest projects and tech insights!
                 </p>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* FAQ Section */}
+        <div 
+          ref={el => {sectionRefs.current[3] = el}}
+          className={`${visibleSections[3] ? 'animate-fadeInUp' : 'opacity-0'}`}
+        >
+          <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Frequently Asked Questions</h2>
+              <p className="text-gray-600 dark:text-gray-400">Quick answers to common questions about working together</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {FAQs.map((faq, index) => (
+                <div key={index} className="p-6 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl border border-blue-200/50 dark:border-blue-800/50">
+                  <h4 className="font-bold text-gray-900 dark:text-white mb-3">{faq.q}</h4>
+                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed">{faq.a}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
