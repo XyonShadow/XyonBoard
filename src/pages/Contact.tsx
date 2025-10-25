@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { CheckCircle, ChevronDown, Github, Linkedin, Mail, MessageCircle, Send } from "lucide-react";
+import { CheckCircle, ChevronDown, Clock, Github, Globe, Linkedin, Mail, MessageCircle, Send, Smile, Twitter } from "lucide-react";
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Contact: React.FC = () => {
@@ -139,6 +139,12 @@ const Contact: React.FC = () => {
   const [isProjectTypeOpen, setIsProjectTypeOpen] = useState(false);
   const [isBudgetOpen, setIsBudgetOpen] = useState(false);
 
+  const socialLinks = [
+    { platform: 'GitHub', url: '#', icon: Github, color: 'hover:bg-gray-700' },
+    { platform: 'LinkedIn', url: '#', icon: Linkedin, color: 'hover:bg-blue-600' },
+    { platform: 'Twitter', url: '#', icon: Twitter, color: 'hover:bg-blue-400' }
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-purple-900/20">
       {/* Hero Section */}
@@ -231,7 +237,8 @@ const Contact: React.FC = () => {
           </div>
         </div>
 
-        <div>
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
           {/* Contact Form */}
           <div 
             ref={el => {sectionRefs.current[1] = el}}
@@ -464,6 +471,96 @@ const Contact: React.FC = () => {
                     )}
                   </button>
                 </form>
+              </div>
+            </div>
+          </div>
+
+          {/* Sidebar */}
+          <div 
+            ref={el => {sectionRefs.current[2] = el}}
+            className={`space-y-6 ${visibleSections[2] ? 'animate-fadeInRight' : 'opacity-0'}`}
+          >
+            {/* Quick Info */}
+            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+                <Globe className="w-5 h-5 text-blue-600" />
+                Quick Info
+              </h3>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <Mail className="w-5 h-5 text-blue-600" />
+                  <div>
+                    <div className="font-medium text-gray-900 dark:text-white">Email</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">prncemk11@gmail.com</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Clock className="w-5 h-5 text-blue-600" />
+                  <div>
+                    <div className="font-medium text-gray-900 dark:text-white">Response Time</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">Within 24 hours</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Github className="w-5 h-5 text-blue-600" />
+                  <div>
+                    <div className="font-medium text-gray-900 dark:text-white">Github</div>
+                      <a 
+                      href="https://github.com/XyonShadow" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-500 transition-colors duration-300"
+                    >
+                      github.com/XyonShadow
+                    </a>
+                    </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Fun Fact */}
+            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+                <Smile className="w-5 h-5 text-blue-600" />
+                Fun Fact
+              </h3>
+              <p className="text-gray-700 dark:text-gray-300">
+                I love diving into creative coding projects and experimenting with new ideas, sometimes I end up exploring side projects just for fun!
+              </p>
+              <p className="text-gray-700 dark:text-gray-300 mt-3">
+                I also enjoy reading and occasionally testing out AI tools to boost productivity.
+              </p>
+              <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
+                <p className="text-sm text-blue-800 dark:text-blue-200">
+                  <strong>Note:</strong> Fun facts aside, feel free to reach out for serious projects anytime!
+                </p>
+              </div>
+            </div>
+
+            {/* Social Links */}
+            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Connect With Me</h3>
+              <div className="space-y-3">
+                {socialLinks.map((social) => {
+                  const Icon = social.icon;
+                  return (
+                    <a
+                      key={social.platform}
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`flex items-center gap-3 p-3 rounded-lg text-gray-700 dark:text-gray-300 hover:text-white transition-all duration-300 ${social.color} hover:scale-105 hover:shadow-lg`}
+                    >
+                      <Icon className="w-5 h-5" />
+                      <span className="font-medium">{social.platform}</span>
+                    </a>
+                  );
+                })}
+              </div>
+              <div className="mt-4 p-3 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Follow me for updates on my latest projects and tech insights!
+                </p>
               </div>
             </div>
           </div>
