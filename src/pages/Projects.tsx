@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { ExternalLink, Github, Calendar, Code, ChevronDown, Search, Filter, Eye, Heart } from 'lucide-react';
+import { ExternalLink, Github, Calendar, Code, ChevronDown, Grid, List, Search, Filter, Eye, Heart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './Projects.css';
 import { projects } from '../data/projects';
@@ -22,135 +22,165 @@ interface ProjectCardProps {
   project: Project;
   index: number;
   isVisible: boolean;
+  viewMode: 'grid' | 'list';
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, isVisible }) => {
+/* 🔹 Small reusable badge */
+const StatusBadge: React.FC<{ project: Project }> = ({ project }) => (
+  <span
+    className={`px-2 py-1 rounded-full text-xs font-semibold backdrop-blur-sm ${
+      project.featured
+        ? "bg-yellow-500/90 text-black animate-glow"
+        : project.status === "completed"
+        ? "bg-emerald-500/90 text-white"
+        : "bg-blue-500/90 text-white"
+    }`}
+  >
+    {project.featured
+      ? "⭐ Featured"
+      : project.status === "completed"
+      ? "✅ Completed"
+      : "🚧 In Progress"}
+  </span>
+);
+
+/* 🔹 Live/GitHub Buttons */
+const ActionButtons: React.FC<{ project: Project }> = ({ project }) => (
+  <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
+    {project.liveUrl && (
+      <a
+        href={project.liveUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="p-2 bg-white/20 backdrop-blur-sm rounded-lg text-white hover:bg-emerald-500 transition-all duration-300 hover:scale-125"
+      >
+        <ExternalLink size={14} />
+      </a>
+    )}
+    {project.githubUrl && (
+      <a
+        href={project.githubUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="p-2 bg-white/20 backdrop-blur-sm rounded-lg text-white hover:bg-gray-700 transition-all duration-300 hover:scale-125"
+      >
+        <Github size={14} />
+      </a>
+    )}
+  </div>
+);
+
+/* 🔹 Like Button */
+const LikeButton: React.FC<{
+  isLiked: boolean;
+  likes: number;
+  handleLike: () => void;
+}> = ({ isLiked, likes, handleLike }) => (
+  <button
+    aria-label={isLiked ? "Unlike project" : "Like project"}
+    onClick={handleLike}
+    className={`flex items-center gap-2 px-3 py-1 rounded-full transition-all duration-300 ${
+      isLiked
+        ? "bg-red-100 dark:bg-red-900/30 text-red-600"
+        : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400"
+    } hover:scale-110`}
+  >
+    <Heart className={`w-4 h-4 ${isLiked ? "fill-current" : ""}`} />
+    <span className="text-sm font-medium">{likes}</span>
+  </button>
+);
+
+/* 🔹 Tech Tags */
+const TechTags: React.FC<{
+  technologies: string[];
+  compact?: boolean;
+}> = ({ technologies, compact = false }) => (
+  <div className="flex flex-wrap gap-2">
+    {technologies
+      .slice(0, compact ? 3 : technologies.length)
+      .map((tech: string) => (
+        <span
+          key={tech}
+          className="px-3 py-1 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 text-blue-800 dark:text-blue-200 text-sm rounded-full font-medium border border-blue-200 dark:border-blue-800 hover:scale-110 transition-transform duration-300 cursor-pointer"
+        >
+          {tech}
+        </span>
+      ))}
+    {compact && technologies.length > 3 && (
+      <span className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 text-xs rounded-full font-medium">
+        +{technologies.length - 3}
+      </span>
+    )}
+  </div>
+);
+
+/* 🔹 Main Project Card */
+const ProjectCard: React.FC<ProjectCardProps> = ({
+  project,
+  index,
+  isVisible,
+  viewMode,
+}) => {
   const [isHovered, setIsHovered] = useState(false);
-  const views = useMemo(() => Math.floor(Math.random() * 1000) + 100, []);
-  const [likes, setLikes] = useState(Math.floor(Math.random() * 50) + 10);
   const [isLiked, setIsLiked] = useState(false);
+  const [likes, setLikes] = useState(Math.floor(Math.random() * 50) + 10);
+  const views = useMemo(() => Math.floor(Math.random() * 1000) + 100, []);
 
   const handleLike = () => {
-    setIsLiked(!isLiked);
+    setIsLiked((prev) => !prev);
     setLikes((prev) => (isLiked ? prev - 1 : prev + 1));
   };
 
+  const baseCardClasses =
+    "bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 hover:shadow-2xl transition-all duration-500";
+
+  const layoutClasses =
+    viewMode === "list"
+      ? "flex flex-col lg:flex-row gap-6 p-6"
+      : "group relative overflow-hidden hover:scale-105 transform";
+
   return (
     <div
-      className={`group relative h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-200/50 dark:border-gray-700/50 overflow-hidden hover:scale-105 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-      style={{ transitionDelay: `${index * 0.1}s` }}
+      className={`${baseCardClasses} ${layoutClasses} ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+      }`}
+      style={{ animationDelay: `${index * 0.1}s` }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Project Image */}
-      <div className="relative h-48 overflow-hidden bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500">
+      {/* Image Section */}
+      <div
+        className={`relative ${
+          viewMode === "list" ? "lg:w-64 h-48 lg:h-32" : "h-48"
+        } bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 rounded-xl overflow-hidden group`}
+      >
         <div
           className={`absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent transition-transform duration-500 ${
             isHovered ? "scale-110" : ""
           }`}
-        ></div>
-
-        {/* Floating Elements */}
-        <div className="absolute inset-0 pointer-events-none">
-          {[...Array(3)].map((_, i) => (
-            <div
-              key={i}
-              className={`absolute w-2 h-2 bg-white/30 rounded-full animate-float-${
-                i + 1
-              }`}
-              style={{
-                left: `${20 + i * 20}%`,
-                top: `${20 + i * 15}%`,
-                animationDelay: `${i * 0.5}s`,
-              }}
-            />
-          ))}
+        />
+        <div className="absolute top-3 left-3">
+          <StatusBadge project={project} />
         </div>
-
-        {/* Status Badge */}
-        <div className="absolute top-4 left-4 animate-fadeInLeft">
-          <span
-            className={`px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-sm ${
-              project.featured
-                ? "bg-yellow-500/90 text-black animate-glow"
-                : project.status === "completed"
-                ? "bg-emerald-500/90 text-white animate-pulse-slow"
-                : "bg-blue-500/90 text-white animate-bounce-gentle"
-            }`}
-          >
-            {project.featured
-              ? "⭐ Featured"
-              : project.status === "completed"
-              ? "✅ Completed"
-              : "🚧 In Progress"}
-          </span>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-500 animate-fadeInRight">
-          {project.liveUrl && (
-            <a
-              href={project.liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-2 bg-white/20 backdrop-blur-sm rounded-lg text-white hover:bg-emerald-500 transition-all duration-300 hover:scale-125 hover:rotate-12"
-            >
-              <ExternalLink size={16} />
-            </a>
-          )}
-          {project.githubUrl && (
-            <a
-              href={project.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-2 bg-white/20 backdrop-blur-sm rounded-lg text-white hover:bg-gray-700 transition-all duration-300 hover:scale-125 hover:rotate-12"
-            >
-              <Github size={16} />
-            </a>
-          )}
-        </div>
-
-        {/* Like Button */}
-        <button
-          onClick={handleLike}
-          className="absolute bottom-4 right-4 p-2 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-red-500 transition-all duration-300 opacity-0 group-hover:opacity-100 hover:scale-110"
-        >
-          <Heart
-            className={`w-4 h-4 ${isLiked ? "fill-current text-red-400" : ""}`}
-          />
-        </button>
+        <ActionButtons project={project} />
       </div>
 
-      {/* Project Info */}
-      <div className="p-6 space-y-4">
-        <div>
-          <h3 className="font-bold text-xl mb-2 text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
-            {project.title}
-          </h3>
-          <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed line-clamp-2">
-            {project.description}
-          </p>
-        </div>
-
-        {/* Technologies */}
-        <div className="flex gap-2 flex-wrap">
-          {project.technologies.slice(0, 3).map((tech: string, techIndex: number) => (
-            <span
-              key={tech}
-              className={`px-3 py-1 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 text-blue-800 dark:text-blue-200 text-xs rounded-full font-medium border border-blue-200 dark:border-blue-800 hover:scale-110 transition-transform duration-300 cursor-pointer opacity-0 animate-fadeInUp`}
-              style={{ animationDelay: `${0.5 + techIndex * 0.1}s` }}
-            >
-              {tech}
-            </span>
-          ))}
-          {project.technologies.length > 3 && (
-            <span className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 text-xs rounded-full font-medium hover:scale-110 transition-transform duration-300 cursor-pointer">
-              +{project.technologies.length - 3}
-            </span>
-          )}
-        </div>
-
-        {/* Stats */}
+      {/* Info Section */}
+      <div className="flex-1 p-4 space-y-3">
+        <h3 className="text-xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer">
+          {project.title}
+        </h3>
+        <p
+          className={`text-gray-600 dark:text-gray-400 ${
+            viewMode === "list" ? "" : "line-clamp-2 text-sm"
+          }`}
+        >
+          {project.longDescription || project.description}
+        </p>
+        <TechTags
+          technologies={project.technologies}
+          compact={viewMode !== "list"}
+        />
         <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1">
@@ -158,14 +188,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, isVisible }) 
               {new Date(project.completedDate).toLocaleDateString()}
             </div>
             <div className="flex items-center gap-1">
-              <Eye className="w-4 h-4" />
-              {views}
+              <Eye className="w-4 h-4" /> {views} views
             </div>
           </div>
-          <div className="flex items-center gap-1">
-            <Heart className="w-4 h-4" />
-            <span>{likes}</span>
-          </div>
+          <LikeButton
+            isLiked={isLiked}
+            likes={likes}
+            handleLike={handleLike}
+          />
         </div>
       </div>
     </div>
@@ -178,6 +208,8 @@ const Projects: React.FC = () => {
   );
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState<"date" | "name" | "featured">("date");
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  
   const [showFilters, setShowFilters] = useState(false);
   const [isSortOpen, setIsSortOpen] = useState(false);
 
@@ -329,6 +361,30 @@ const Projects: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-4">
+              {/* View Mode Toggle */}
+              <div className="flex bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`p-2 rounded-md transition-all duration-200 ${
+                    viewMode === 'grid'
+                      ? 'bg-white dark:bg-gray-600 text-blue-600 shadow-sm'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                  }`}
+                >
+                  <Grid className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`p-2 rounded-md transition-all duration-200 ${
+                    viewMode === 'list'
+                      ? 'bg-white dark:bg-gray-600 text-blue-600 shadow-sm'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                  }`}
+                >
+                  <List className="w-4 h-4" />
+                </button>
+              </div>
+
               {/* Sort Dropdown */}
               <div className="relative w-48" ref={dropdownRef}>
                 <button
@@ -436,13 +492,17 @@ const Projects: React.FC = () => {
         {/* Projects Grid */}
         <div ref={containerRef}>
           {filteredProjects.length > 0 ? (
-            <div className={"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"}>
+            <div className={viewMode === 'grid' 
+              ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8' 
+              : 'space-y-6'
+            }>
               {filteredProjects.map((project, index) => (
                 <ProjectCard
                   key={project.id}
                   project={project}
                   index={index}
                   isVisible={visibleProjects[index] || false}
+                  viewMode={viewMode}
                 />
               ))}
             </div>
@@ -451,16 +511,14 @@ const Projects: React.FC = () => {
               <div className="w-64 h-64 mx-auto mb-8 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/20 dark:to-purple-900/20 rounded-full flex items-center justify-center">
                 <Search className="w-20 h-20 text-gray-400" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                No Projects Found
-              </h3>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">No Projects Found</h3>
               <p className="text-gray-600 dark:text-gray-400 max-w-md mx-auto">
                 Try adjusting your search terms or filters to find what you're looking for.
               </p>
               <button
                 onClick={() => {
-                  setSearchTerm("");
-                  setFilter("all");
+                  setSearchTerm('');
+                  setFilter('all');
                 }}
                 className="mt-6 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold hover:scale-105 transition-transform duration-300"
               >
