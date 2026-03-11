@@ -68,7 +68,7 @@ const AnimatedProgressBar: React.FC<{
   const Icon = skill.icon;
 
   return (
-    <div className={`cursor-default ${isVisible ? 'animate-fadeInLeft' : 'opacity-0 -translate-x-8'}`}>
+    <div className={`cursor-default ${isVisible ? 'animate-fadeInLeft' : 'opacity-0 translate-x-8'}`}>
     <div className="transition-transform duration-300 hover:scale-[1.05]">  {/* Skill name and icon */}
       <div className="flex justify-between items-center mb-3">
         <div className="flex items-center gap-3">
@@ -173,7 +173,7 @@ export const SkillsOverview: React.FC = () => {
       </div>
 
       {/* Floating skill badges */}
-      <div className={`mt-8 flex flex-wrap gap-2 opacity-0 ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`} style={{ animationDelay: '1s' }}>
+      <div className={`mt-8 flex flex-wrap gap-2 ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`} style={{ animationDelay: '1s' }}>
         {[
           { label: 'Frontend', from: 'blue-500', to: 'cyan-500' },
           { label: 'Backend', from: 'green-500', to: 'emerald-500' },
@@ -184,7 +184,7 @@ export const SkillsOverview: React.FC = () => {
             key={badge.label}
             className={`px-3 py-1 bg-gradient-to-r from-${badge.from} to-${badge.to} text-white text-xs
                         rounded-full shadow-lg transition-transform duration-300 cursor-default
-                        opacity-0 animate-fadeInUp`}
+                        animate-fadeInUp`}
             style={{ animationDelay: `${1 + index * 0.2}s` }} // Each badge starts slightly after the previous
           >
             {badge.label}

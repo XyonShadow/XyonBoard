@@ -114,13 +114,13 @@ export const StatsCards: React.FC = () => {
             ref={el => { cardRefs.current[index] = el; }} // Assign ref for IntersectionObserver
             className={`group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl
                         shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-200/50
-                        dark:border-gray-700/50 hover:scale-105 transform cursor-pointer opacity-0
+                        dark:border-gray-700/50 hover:scale-105 transform cursor-pointer
                         ${isVisible ? 'animate-fadeInUp' : 'opacity-0 translate-y-8'} // Slide in when visible
                       `}
             style={{ animationDelay: `${index * 0.1}s` }} // Slight delay per card
           >
             {/* Gradient Overlay appears on hover */}
-            <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} opacity-0 group-hover:opacity-10 rounded-2xl transition-all duration-500`}></div>
+            <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} opacity-0 group-hover:opacity-40 rounded-2xl transition-all duration-500`}></div>
             
             {/* Floating content on hover */}
             <div className="relative z-10 group-hover:-translate-y-1 transition-transform duration-300">

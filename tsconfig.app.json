@@ -23,5 +23,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src"]
+  "include": ["src", "id y/ActivityFeed.tsx", "id y/SkillsBars.tsx", "id y/PageHeader.tsx"]
 }

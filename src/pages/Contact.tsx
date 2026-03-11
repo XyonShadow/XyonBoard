@@ -175,21 +175,21 @@ const Contact: React.FC = () => {
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-yellow-300/20 rounded-full translate-y-32 -translate-x-16 blur-2xl animate-floatReverse"></div>
         
         <div className="relative z-10 max-w-6xl mx-auto px-6 text-center">
-          <div className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6 opacity-0 animate-fadeInDown">
+          <div className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6 animate-fadeInDown">
             <MessageCircle className="w-4 h-4" />
             <span className="text-sm font-medium">Let's Connect</span>
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight opacity-0 animate-fadeInUp">
+          <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight animate-fadeInUp">
             Get In <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400">Touch</span>
           </h1>
           
-          <p className="text-xl max-w-2xl mx-auto leading-relaxed opacity-0 animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
+          <p className="text-xl max-w-2xl mx-auto leading-relaxed animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
             Ready to bring your ideas to life? Let's discuss your project and create something amazing together.
           </p>
 
           {/* Quick Stats */}
-          <div className="flex justify-center gap-8 mt-8 opacity-0 animate-fadeInUp" style={{ animationDelay: '0.4s' }}>
+          <div className="flex justify-center gap-8 mt-8 animate-fadeInUp" style={{ animationDelay: '0.4s' }}>
             <div className="text-center">
               <div className="text-3xl font-bold">24h</div>
               <div className="text-sm opacity-80">Response Time</div>
@@ -207,7 +207,7 @@ const Contact: React.FC = () => {
         {/* Connect Options */}
         <div 
           ref={el => {sectionRefs.current[0] = el}}
-          className={`opacity-0 ${visibleSections[0] ? 'animate-fadeInUp' : ''}`}
+          className={`${visibleSections[0] ? 'animate-fadeInUp' : 'opacity-0'}`}
         >
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Choose Your Preferred Way</h2>
@@ -223,7 +223,7 @@ const Contact: React.FC = () => {
                   href={option.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-200/50 dark:border-gray-700/50 cursor-pointer hover:scale-105 transform opacity-0 animate-fadeInUp"
+                  className="group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-200/50 dark:border-gray-700/50 cursor-pointer hover:scale-105 transform animate-fadeInUp"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <div

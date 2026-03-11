@@ -111,7 +111,7 @@ const About: React.FC = () => {
       {/* Hero Section */}
       <div
         ref={el => { sectionRefs.current[0] = el }}
-        className={`relative overflow-hidden bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white py-20 opacity-0 ${visibleSections[0] ? 'animate-fadeInUp' : 'opacity-0'}`}
+        className={`relative overflow-hidden bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white py-20 ${visibleSections[0] ? 'animate-fadeInUp' : 'opacity-0'}`}
       >
         <div className="absolute inset-0 bg-black/20" /> {/* Overlay */}
 
@@ -129,16 +129,16 @@ const About: React.FC = () => {
                 <span className="text-sm font-medium">About Me</span>
               </div>
 
-              <h1 className="text-5xl md:text-7xl font-black leading-tight opacity-0 animate-fadeInUp">
+              <h1 className="text-5xl md:text-7xl font-black leading-tight animate-fadeInUp">
                 I'm <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400">Michael</span>
               </h1>
 
-              <p className="text-xl leading-relaxed opacity-0 animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
+              <p className="text-xl leading-relaxed animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
                 A passionate developer who loves creating beautiful, functional, and user-centered digital experiences.
               </p>
 
               {/* Contact buttons */}
-              <div className="flex items-center gap-3 opacity-0 animate-fadeInUp" style={{ animationDelay: '0.4s' }}>
+              <div className="flex items-center gap-3 animate-fadeInUp" style={{ animationDelay: '0.4s' }}>
                 <div className="flex items-center gap-2">
                   <div className="flex items-center justify-center w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg text-white hover:bg-gray-700 transition-all duration-300 hover:scale-110 hover:rotate-12 cursor-pointer">
                     <Mail className="w-5 h-5" />
@@ -186,7 +186,7 @@ const About: React.FC = () => {
         {/* Personal Stats Section */}
         <div
           ref={el => { sectionRefs.current[1] = el }}
-          className={`opacity-0 ${visibleSections[1] ? 'animate-fadeInUp' : 'opacity-0'}`}
+          className={`${visibleSections[1] ? 'animate-fadeInUp' : 'opacity-0'}`}
         >
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {personalStats.map((stat) => {
@@ -194,7 +194,7 @@ const About: React.FC = () => {
               return (
                 <div 
                   key={stat.label}
-                  className={`bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 hover:scale-105 transform transition-all duration-500 text-center group opacity-0 animate-fadeInUp`}
+                  className={`bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 hover:scale-105 transform transition-all duration-500 text-center group animate-fadeInUp`}
                 >
                   <Icon className="w-8 h-8 mx-auto mb-3 text-blue-600 group-hover:scale-125 transition-transform duration-300" />
                   <div className="text-2xl font-bold text-gray-900 dark:text-white mb-1">{stat.value}</div>
@@ -208,7 +208,7 @@ const About: React.FC = () => {
         {/* Tabs Section */}
         <div 
           ref={el => { sectionRefs.current[2] = el }}
-          className={`opacity-0 ${visibleSections[2] ? 'animate-fadeInUp' : 'opacity-0'}`}
+          className={`${visibleSections[2] ? 'animate-fadeInUp' : 'opacity-0'}`}
         >
           {/* Tabs container */}
           <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
@@ -354,7 +354,7 @@ const About: React.FC = () => {
         {/* Core Skills Section with Progress Bars */}
         <div
           ref={el => {sectionRefs.current[3] = el}}
-          className={`opacity-0 ${visibleSections[3] ? 'animate-fadeInUp' : 'opacity-0'}`}
+          className={`${visibleSections[3] ? 'animate-fadeInUp' : 'opacity-0'}`}
         >
           <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center animate-fadeIn">Core Skills</h2>

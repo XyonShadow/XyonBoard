@@ -11,34 +11,41 @@ const roles = [
   'Tech Innovator'
 ];
 
-export const HeroSection: React.FC = () => {
-  const [typewriterText, setTypewriterText] = useState('');
-  const [currentIndex, setCurrentIndex] = useState(0);
+function useTypewriter(words: string[]) {
+  const [text, setText] = useState('');
+  const [index, setIndex] = useState(0);
+  const [wordIndex, setWordIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [loopNum, setLoopNum] = useState(0);
-  const [typingSpeed, setTypingSpeed] = useState(150);
 
   useEffect(() => {
-    const handleType = () => {
-      const currentRole = roles[loopNum % roles.length];
-      const updatedText = isDeleting
-        ? currentRole.substring(0, currentIndex - 1)
-        : currentRole.substring(0, currentIndex + 1);
-      setTypewriterText(updatedText);
-      setTypingSpeed(isDeleting ? 100 : 150);
-      if (!isDeleting && updatedText === currentRole) {
-        setTimeout(() => setIsDeleting(true), 2000);
-      } else if (isDeleting && updatedText === '') {
-        setIsDeleting(false);
-        setLoopNum(loopNum + 1);
-      }
-      
-      setCurrentIndex(isDeleting ? currentIndex - 1 : currentIndex + 1);
-    };
+    const currentWord = words[wordIndex % words.length];
 
-    const timer = setTimeout(handleType, typingSpeed);
-    return () => clearTimeout(timer);
-  }, [currentIndex, isDeleting, loopNum, typingSpeed]);
+    const timeout = setTimeout(() => {
+      const updated = isDeleting
+        ? currentWord.substring(0, index - 1)
+        : currentWord.substring(0, index + 1);
+
+      setText(updated);
+      setIndex(isDeleting ? index - 1 : index + 1);
+
+      if (!isDeleting && updated === currentWord) {
+        setTimeout(() => setIsDeleting(true), 2000);
+      }
+
+      if (isDeleting && updated === '') {
+        setIsDeleting(false);
+        setWordIndex(prev => prev + 1);
+      }
+    }, isDeleting ? 80 : 140);
+
+    return () => clearTimeout(timeout);
+  }, [index, isDeleting, wordIndex, words]);
+
+  return text;
+}
+
+export const HeroSection: React.FC = () => {
+  const typewriterText = useTypewriter(roles);
 
   return (
     <div className="relative overflow-hidden bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 rounded-3xl p-8 md:p-12 text-white shadow-2xl opacity-0 animate-fadeInUp">

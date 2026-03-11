@@ -86,7 +86,7 @@ const ProjectCard: React.FC<{
 
   return (
     <div 
-      className={`group relative h-[26rem] opacity-0 perspective-1000 ${isVisible ? 'animate-fadeInUp' : 'opacity-0 translate-y-8'}`}
+      className={`group relative h-[26rem] perspective-1000 ${isVisible ? 'animate-fadeInUp' : 'opacity-0 translate-y-8'}`}
       style={{ animationDelay: `${index * 0.2}s` }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -135,7 +135,7 @@ const ProjectCard: React.FC<{
               </div>
 
               {/* Action buttons: Live & GitHub links */}
-              <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-500 animate-fadeInRight">
+              <div className="absolute top-4 right-4 flex gap-2 group-hover:opacity-100 transition-all duration-500 animate-fadeInRight">
                 {project.liveUrl && (
                   <a
                     href={project.liveUrl}
@@ -181,7 +181,7 @@ const ProjectCard: React.FC<{
                 {project.technologies.map((tech, techIndex) => (
                   <span 
                     key={tech}
-                    className={`px-3 py-1 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 text-blue-800 dark:text-blue-200 text-xs rounded-full font-medium border border-blue-200 dark:border-blue-800 hover:scale-110 transition-transform duration-300 cursor-default opacity-0 animate-fadeInUp`}
+                    className={`px-3 py-1 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 text-blue-800 dark:text-blue-200 text-xs rounded-full font-medium border border-blue-200 dark:border-blue-800 hover:scale-110 transition-transform duration-300 cursor-default animate-fadeInUp`}
                     style={{ animationDelay: `${0.5 + techIndex * 0.1}s` }}
                   >
                     {tech}
